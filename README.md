@@ -1,6 +1,6 @@
 # Bank Account Management System
 
-A **Java-based console application** for managing bank accounts, customers, and transactions. This system supports **Savings** and **Checking** accounts for **Regular** and **Premium** customers, providing features like account creation, transaction processing, and transaction history viewing.
+A Java-based console application for managing bank accounts, customers, and transactions. This system supports Savings and Checking accounts for Regular and Premium customers, providing features like account creation, transaction processing, and transaction history viewing.
 
 ---
 
