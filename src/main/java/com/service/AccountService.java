@@ -26,15 +26,16 @@ public class AccountService {
     // Data management layer for account operations
     private final AccountManagement accountManagement;
     private final TransactionManagement transactionManagement;
-
+    private  final CustomerManagement customerManagement;
     // Scanner instance for reading user input
     private final Scanner scanner;
 
     // Constructs a new AccountService with the provided dependencies.
-    public AccountService(AccountManagement accountManagement,TransactionManagement transactionManagement ,Scanner scanner) {
+    public AccountService(AccountManagement accountManagement,TransactionManagement transactionManagement,CustomerManagement customerManagement ,Scanner scanner) {
         this.accountManagement = accountManagement;
         this.transactionManagement = transactionManagement;
         this.scanner = scanner;
+        this.customerManagement = customerManagement;
     }
 
     // Guides the user through the account creation process.
@@ -71,10 +72,10 @@ public class AccountService {
         Customer customer;
         switch (customerTypeInput) {
             case "1":
-                customer = new RegularCustomer(customerName, customerAge, customerContact, customerAddress);
+                customer = new RegularCustomer(customerName, customerAge, customerContact, customerAddress, "Regular");
                 break;
             case "2":
-                customer = new PremiumCustomer(customerName, customerAge, customerContact, customerAddress);
+                customer = new PremiumCustomer(customerName, customerAge, customerContact, customerAddress,"Premium");
                 break;
             default:
                 System.out.println("Invalid customer type. Account creation aborted.");
@@ -96,6 +97,7 @@ public class AccountService {
         }
 
         // Add account and display confirmation
+        customerManagement.addCustomer(customer);
         accountManagement.addAccount(newAccount);
         String dateTime = LocalDateTime.now().format(formatter);
         boolean success = newAccount.processTransactions(initialDepositAmount, "Deposit");
@@ -125,6 +127,11 @@ public class AccountService {
         System.out.println("====================================================");
 
         Account[] allAccounts = accountManagement.viewAllAccounts();
+        if(allAccounts.length ==0){
+            System.out.println("No Account In System.Returning to Main menu");
+            CustomUtils.promptEnterKey(scanner);
+            return;
+        }
         for (int i = 0; i < accountManagement.accountCount; i++) {
             Account account = allAccounts[i];
             System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",

@@ -117,13 +117,13 @@ public class TransactionServices {
         System.out.println("=====================================================================");
         System.out.println("TXN ID | DATE/TIME          | TYPE    | AMOUNT    | BALANCE");
 
-        for (Transaction tr : transactions) {
-            if (tr.getType().equals("Deposit")) totalDeposits += tr.getAmount();
-            else if (tr.getType().equals("Withdrawal")) totalWithdrawals += tr.getAmount();
+        for (Transaction transaction : transactions) {
+            if (transaction.getType().equals("Deposit")) totalDeposits += transaction.getAmount();
+            else if (transaction.getType().equals("Withdrawal")) totalWithdrawals += transaction.getAmount();
 
             System.out.printf("%s |%s |%s  |%s$%.2f  |$%.2f\n",
-                    tr.getTransactionId(), tr.getTimeStamp(), tr.getType(),
-                    tr.getType().equals("Deposit") ? "+" : "-", tr.getAmount(), tr.getBalanceAfter());
+                    transaction.getTransactionId(), transaction.getTimeStamp(), transaction.getType(),
+                    transaction.getType().equals("Deposit") ? "+" : "-", transaction.getAmount(), transaction.getBalanceAfter());
         }
 
         System.out.println("=====================================================================\n");
