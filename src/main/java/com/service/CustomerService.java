@@ -28,10 +28,6 @@ public class CustomerService {
         System.out.println("CUSTOMER ID | NAME    | TYPE  | CONTACT    | ADDRESS");
 
         for (Customer customer : customers) {
-
-//            System.out.printf("%s |%s |%s  |%s |%s\n",
-//                    customer.getCustomerId(), customer.getName(), customer.getContact(),
-//                    customer.getAddress());
             System.out.printf("%s",customer.displayCustomerDetails());
         }
 

@@ -1,6 +1,8 @@
 
 package com.models;
 
+import com.exceptions.CustomExceptions;
+
 /*
  * Abstract class representing a bank account.
  *
@@ -114,13 +116,13 @@ public abstract class Account implements Transactable {
      * Validates that the deposit amount is positive before adding it to the account balance.
      * Returns true if successful, false otherwise.
      */
-    public abstract boolean deposit(double amount);
+    public abstract boolean deposit(double amount) throws CustomExceptions.IllegalAmountException;
 
     /*
      * Abstract method for processing withdrawal transactions.
      * Subclasses must implement account-specific withdrawal logic.
      */
-    public abstract void withdraw(double amount);
+    public abstract void withdraw (double amount)throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions;
 
     /*
      * Returns a string representation of the account.
@@ -136,7 +138,7 @@ public abstract class Account implements Transactable {
      * Processes a transaction based on the specified type.
      * Routes to deposit or withdraw based on transaction type.
      */
-    public boolean processTransactions(double amount, String type) {
+    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {

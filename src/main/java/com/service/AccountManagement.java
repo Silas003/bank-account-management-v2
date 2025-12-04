@@ -1,5 +1,6 @@
 
 package com.service;
+import com.exceptions.CustomExceptions;
 import com.models.Account;
 
 // Management layer for account data operations and storage.
@@ -35,12 +36,12 @@ public class AccountManagement {
 
     // Finds an account by its account number.
     // Searches through all accounts in the system to find a match.
-    public static Account findAccount(String accountNumber) {
+    public static Account findAccount(String accountNumber) throws CustomExceptions.InvalidAccountException {
         for (int i = 0; i < accountCount; i++) {
             Account account = accounts[i];
             if (account.getAccountNumber().equals(accountNumber)) return account;
         }
-        return null;
+        throw new CustomExceptions.InvalidAccountException("Account Number not found.Returning to main menu");
     }
 
     // Retrieves all accounts in the system.

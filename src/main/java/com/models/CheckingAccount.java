@@ -1,6 +1,8 @@
 
 package com.models;
 
+import com.exceptions.CustomExceptions;
+
 /*
  * Represents a checking account with overdraft protection and monthly fees.
  *
@@ -92,19 +94,19 @@ public class CheckingAccount extends Account {
      * Validates whether a withdrawal would exceed the overdraft limit.
      * Checks if the absolute value of the balance after withdrawal would exceed the limit.
      */
-    public boolean hasOverdraftLimitExceeded(double amount) {
+    public boolean hasOverdraftLimitExceeded(double amount) throws CustomExceptions.OverdraftLimitException , CustomExceptions.IllegalAmountException {
         double overdraftLimit = this.getOverdraftLimit();
         double balance = getBalance();
-
+        if(amount < 0) throw new CustomExceptions.IllegalAmountException("Amount cannot be less than 0");
         if (Math.abs(balance - amount) > overdraftLimit) {
-            System.out.println("You can't withdraw more than your overdraft limit");
-            return true;
+            throw new CustomExceptions.OverdraftLimitException("You can't withdraw more than your overdraft limit");
+
         }
         return false;
     }
 
-    public  boolean deposit(double amount) {
-        if (amount <= 0) return false;
+    public  boolean deposit(double amount) throws CustomExceptions.IllegalAmountException {
+        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
     }
@@ -112,11 +114,10 @@ public class CheckingAccount extends Account {
      * Processes a withdrawal transaction with overdraft protection.
      * Rejects withdrawal if overdraft limit would be exceeded.
      */
-    public void withdraw(double amount) {
+    public void withdraw(double amount) throws CustomExceptions.IllegalAmountException, CustomExceptions.OverdraftLimitException {
         double balance = getBalance();
-        if (hasOverdraftLimitExceeded(amount)) {
-            return;
-        }
+        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Withdrawal amount cannot be zero");
+        hasOverdraftLimitExceeded(amount);
         this.setBalance(balance - amount);
     }
 
@@ -126,7 +127,7 @@ public class CheckingAccount extends Account {
      * Processes a transaction with enhanced validation for checking accounts.
      * Deposits are processed normally; withdrawals are validated against overdraft limit.
      */
-    public boolean processTransactions(double amount, String type) {
+    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {

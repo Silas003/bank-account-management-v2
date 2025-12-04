@@ -22,5 +22,5 @@ public interface Transactable {
      * @param type The transaction type, case-insensitive. Expected values: "Deposit" or "Withdrawal"
      * @return true if the transaction was processed successfully, false otherwise
      */
-    boolean processTransactions(double amount, String type);
+    boolean processTransactions(double amount, String type) throws RuntimeException;
 }

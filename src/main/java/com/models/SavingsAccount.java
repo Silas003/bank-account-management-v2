@@ -1,6 +1,8 @@
 
 package com.models;
 
+import com.exceptions.CustomExceptions;
+
 /*
  * Represents a savings account with interest accrual and minimum balance requirements.
  *
@@ -67,8 +69,8 @@ public class SavingsAccount extends Account {
         return "Savings";
     }
 
-    public  boolean deposit(double amount) {
-        if (amount <= 0) return false;
+    public  boolean deposit(double amount) throws CustomExceptions.IllegalAmountException {
+        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
     }
@@ -78,10 +80,11 @@ public class SavingsAccount extends Account {
      * Ensures the balance does not go below zero.
      */
     @Override
-    public void withdraw(double amount) {
+    public void withdraw(double amount) throws CustomExceptions.InsufficientFundsExceptions,CustomExceptions.IllegalAmountException{
         double balance = getBalance();
+        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
         if (balance != 0 && (balance - amount < 0)) {
-            System.out.println("You can't withdraw below a balance of 0");
+            throw new CustomExceptions.InsufficientFundsExceptions("You can't withdraw below a balance of 0");
         } else {
             setBalance(balance - amount);
         }
@@ -117,14 +120,14 @@ public class SavingsAccount extends Account {
      * Processes a transaction with minimum balance validation for savings accounts.
      * Deposits are processed normally; withdrawals must maintain minimum balance.
      */
-    public boolean processTransactions(double amount, String type) {
+    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
         if ("Deposit".equalsIgnoreCase(type)) {
             return deposit(amount);
         } else if ("Withdrawal".equalsIgnoreCase(type)) {
             if (getBalance() - amount >= getMinimumBalance()) {
                 withdraw(amount);
                 return true;
-            } else return false;
+            } throw new CustomExceptions.InsufficientFundsExceptions("You cannot withdraw more than your minimum allowed balance");
         }
         return false;
     }
