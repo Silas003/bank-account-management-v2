@@ -33,6 +33,8 @@ public abstract class Customer {
     // Customer's contact phone number
     private String contact;
 
+    private String type;
+
     // Customer's physical address
     private String address;
 
@@ -60,12 +62,13 @@ public abstract class Customer {
      * Constructs a customer with all required information.
      * Initializes the customer with a unique ID, then sets all provided fields.
      */
-    Customer(String name, int age, String contact, String address) {
+    Customer(String name, int age, String contact, String address,String type) {
         this();
         setName(name);
         setAge(age);
         setContact(contact);
         setAddress(address);
+        setType(type);
     }
 
     // Retrieves the customer's unique identifier
@@ -75,7 +78,7 @@ public abstract class Customer {
 
     // Generates and sets a unique customer ID based on the current customer counter
     public void setCustomerId() {
-        this.customerId = "CUS" + ++customerCounter;
+        this.customerId = "CUS00" + ++customerCounter;
     }
 
     // Retrieves the customer's name
@@ -118,15 +121,19 @@ public abstract class Customer {
         this.address = address;
     }
 
+    public  void setType(String type){
+        this.type = type;
+    }
+
     /*
      * Abstract method to return customer details for display purposes.
      * Subclasses should implement this to return a formatted representation of all customer information.
      */
-    abstract Customer displayCustomerDetails();
+    public abstract String displayCustomerDetails();
 
     /*
      * Abstract method to return the customer type identifier.
      * Subclasses must return their specific customer type (e.g., "Regular", "Premium").
      */
-    abstract String getCustomerType();
+    public abstract String getCustomerType();
 }

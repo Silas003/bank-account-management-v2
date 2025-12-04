@@ -24,8 +24,8 @@ public class PremiumCustomer extends Customer {
      * Constructs a premium customer with the provided information.
      * Initializes the customer with premium status and sets the minimum balance requirement to $10,000.
      */
-    public PremiumCustomer(String name, int age, String contact, String address) {
-        super(name, age, contact, address);
+    public PremiumCustomer(String name, int age, String contact, String address,String type) {
+        super(name, age, contact, address,type);
     }
 
     // Retrieves the minimum balance requirement for premium customers
@@ -45,15 +45,17 @@ public class PremiumCustomer extends Customer {
      * Returns this customer object for display purposes.
      */
     @Override
-    Customer displayCustomerDetails() {
-        return this;
+    public String displayCustomerDetails() {
+        return String.format("%s |%s |%s  |%s |%s\n",
+                this.getCustomerId(), this.getName(), this.getCustomerType(),this.getContact(),
+                this.getAddress());
     }
 
     /*
      * Returns the customer type identifier.
      */
     @Override
-    String getCustomerType() {
+    public String getCustomerType() {
         return "Premium";
     }
 

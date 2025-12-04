@@ -18,23 +18,25 @@ public class RegularCustomer extends Customer {
     /*
      * Constructs a regular customer with the provided information.
      */
-    public RegularCustomer(String name, int age, String contact, String address) {
-        super(name, age, contact, address);
+    public RegularCustomer(String name, int age, String contact, String address,String type) {
+        super(name, age, contact, address, type);
     }
 
     /*
      * Returns this customer object for display purposes.
      */
     @Override
-    Customer displayCustomerDetails() {
-        return this;
+    public String displayCustomerDetails() {
+        return String.format("%s |%s |%s  |%s |%s\n",
+                this.getCustomerId(), this.getName(), this.getCustomerType(),this.getContact(),
+                this.getAddress());
     }
 
     /*
      * Returns the customer type identifier.
      */
     @Override
-    String getCustomerType() {
+    public String getCustomerType() {
         return "regular";
     }
 }
