@@ -1,8 +1,6 @@
 package com.service;
-
 import com.models.Customer;
 import com.utilities.CustomUtils;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 

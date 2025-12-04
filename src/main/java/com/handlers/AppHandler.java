@@ -4,66 +4,26 @@ import com.service.*;
 
 import java.util.Scanner;
 
-/*
- * Application handler that manages the main menu and user interaction flow.
- *
- * This class serves as the primary controller for the Bank Account Management System,
- * coordinating between the account and transaction services to provide a unified
- * user interface. It maintains the main application loop and routes user selections
- * to the appropriate service methods.
- *
- * The handler supports the following operations:
- * - Account creation
- * - Account viewing
- * - Transaction processing
- * - Transaction history viewing
- */
 public class AppHandler {
 
-    // Service for handling account-related operations
     private final AccountService accountService;
-
-    // Service for handling transaction-related operations
     private final TransactionServices transactionService;
-
     private final CustomerService customerService;
-    // Management layer for account data operations
     private final AccountManagement accountManagement = new AccountManagement();
 
-    // Management layer for transaction data operations
     private final TransactionManagement transactionManagement = new TransactionManagement();
 
     private final CustomerManagement customerManagement = new CustomerManagement();
 
-    // Scanner instance for reading user input from console
     private final Scanner scanner = new Scanner(System.in);
 
-    /*
-     * Constructs a new AppHandler.
-     *
-     * Initializes the account and transaction services with their respective
-     * management dependencies and the shared scanner for user input.
-     */
     public AppHandler() {
         accountService = new AccountService(accountManagement, transactionManagement,customerManagement,scanner);
         transactionService = new TransactionServices(accountManagement, transactionManagement, scanner);
         customerService = new CustomerService(customerManagement,scanner);
     }
 
-    /*
-     * Starts the main application loop and displays the interactive menu.
-     *
-     * Continuously displays the main menu options and processes user selections
-     * until the user chooses to exit. Each menu option delegates to the appropriate
-     * service method for execution.
-     *
-     * Menu options:
-     * 1. Create Account - Opens account creation wizard
-     * 2. View Accounts - Displays all accounts in the system
-     * 3. Process Transaction - Handles deposits and withdrawals
-     * 4. View Transaction History - Shows transaction history for an account
-     * 5. Exit - Terminates the application
-     */
+
     public void start() {
         boolean running = true;
         System.out.println("||====================================||");
