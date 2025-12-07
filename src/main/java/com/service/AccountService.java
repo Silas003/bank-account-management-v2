@@ -1,7 +1,7 @@
 package com.service;
-import com.exceptions.CustomExceptions;
 import com.models.*;
-import com.utilities.CustomUtils;
+import com.models.exceptions.*;
+import com.utilities.ValidationUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,13 +31,13 @@ public class AccountService {
         System.out.println("ACCOUNT CREATION");
         System.out.println("====================================");
         try{
-            customerName = CustomUtils.validateCustomerNameInput(scanner);
-            customerAge = CustomUtils.validateCustomerAgeInput(scanner);
-            customerContact = CustomUtils.validateCustomerContactInput(scanner);
-            customerAddress = CustomUtils.validateCustomerAddressInput(scanner);
-            String customerTypeInput = CustomUtils.validateCustomerTypeInput(scanner);
-            String accounTypeInput = CustomUtils.validateAccountTypeInput(scanner);
-            double initialDepositAmount = CustomUtils.validateInitialDepositInput(scanner, customerTypeInput, accounTypeInput);
+            customerName = ValidationUtils.validateCustomerNameInput(scanner);
+            customerAge = ValidationUtils.validateCustomerAgeInput(scanner);
+            customerContact = ValidationUtils.validateCustomerContactInput(scanner);
+            customerAddress = ValidationUtils.validateCustomerAddressInput(scanner);
+            String customerTypeInput = ValidationUtils.validateCustomerTypeInput(scanner);
+            String accounTypeInput = ValidationUtils.validateAccountTypeInput(scanner);
+            double initialDepositAmount = ValidationUtils.validateInitialDepositInput(scanner, customerTypeInput, accounTypeInput);
 
 
             Customer customer;
@@ -59,12 +59,12 @@ public class AccountService {
             System.out.println("Account created successfully!");
             System.out.println(newAccount.displayAccountDetails());
 
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
 
-        } catch (CustomExceptions.CustomerNameException | CustomExceptions.CustomerAddressException | CustomExceptions.CustomerAgeException |
-                 CustomExceptions.TypeSelectionException | CustomExceptions.CustomerContactException |CustomExceptions.IllegalAmountException ce){
+        } catch (CustomerNameException | CustomerAddressException | CustomerAgeException |
+                 TypeSelectionException | CustomerContactException | IllegalAmountException ce){
             System.out.println(ce.getMessage());
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -81,7 +81,7 @@ public class AccountService {
         Account[] allAccounts = accountManagement.viewAllAccounts();
         if(allAccounts.length == 0){
             System.out.println("No Account In System.Returning to Main menu");
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
             return;
         }
         for (int i = 0; i < accountManagement.accountCount; i++) {
@@ -97,6 +97,6 @@ public class AccountService {
 
         System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",
                 accountManagement.getAccountCount(), accountManagement.getTotalBalance());
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 }

@@ -1,6 +1,5 @@
 package com.models;
-import com.exceptions.CustomExceptions;
-
+import com.models.exceptions.*;
 public class SavingsAccount extends Account {
 
     private final double interestRate;
@@ -37,18 +36,18 @@ public class SavingsAccount extends Account {
         return "Savings";
     }
 
-    public  boolean deposit(double amount) throws CustomExceptions.IllegalAmountException {
-        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
+    public  boolean deposit(double amount) throws IllegalAmountException {
+        if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
     }
 
     @Override
-    public void withdraw(double amount) throws CustomExceptions.InsufficientFundsExceptions,CustomExceptions.IllegalAmountException{
+    public void withdraw(double amount) throws InsufficientFundsExceptions, IllegalAmountException{
         double balance = getBalance();
-        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
+        if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         if (balance != 0 && (balance - amount < 0)) {
-            throw new CustomExceptions.InsufficientFundsExceptions("You can't withdraw below a balance of 0");
+            throw new InsufficientFundsExceptions("You can't withdraw below a balance of 0");
         } else {
             setBalance(balance - amount);
         }
@@ -72,14 +71,14 @@ public class SavingsAccount extends Account {
         return String.format("Interest Rate: %s Min Balance:$ %.2f", getInterestRate(), getMinimumBalance());
     }
 
-    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
         if ("Deposit".equalsIgnoreCase(type)) {
             return deposit(amount);
         } else if ("Withdrawal".equalsIgnoreCase(type)) {
             if (getBalance() - amount >= getMinimumBalance()) {
                 withdraw(amount);
                 return true;
-            } throw new CustomExceptions.InsufficientFundsExceptions("You cannot withdraw more than your minimum allowed balance");
+            } throw new InsufficientFundsExceptions("You cannot withdraw more than your minimum allowed balance");
         }
         return false;
     }

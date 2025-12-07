@@ -1,5 +1,5 @@
 package com.models;
-import com.exceptions.CustomExceptions;
+import com.models.exceptions.*;
 
 public abstract class Account implements Transactable {
 
@@ -60,9 +60,9 @@ public abstract class Account implements Transactable {
         this.status = status;
     }
 
-    public abstract boolean deposit(double amount) throws CustomExceptions.IllegalAmountException;
+    public abstract boolean deposit(double amount) throws IllegalAmountException;
 
-    public abstract void withdraw (double amount)throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions;
+    public abstract void withdraw (double amount)throws IllegalAmountException, InsufficientFundsExceptions;
 
     @Override
     public String toString() {
@@ -70,7 +70,7 @@ public abstract class Account implements Transactable {
                 getCustomer(), getAccountType(), getBalance());
     }
 
-    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {

@@ -1,8 +1,8 @@
 package com.service;
-import com.exceptions.CustomExceptions;
+import com.models.exceptions.*;
 import com.models.Account;
 import com.models.Transaction;
-import com.utilities.CustomUtils;
+import com.utilities.ValidationUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,14 +33,14 @@ public class TransactionServices {
         System.out.println("===================");
 
         try {
-            String accountNumber = CustomUtils.validateAccountNumberInput(scanner);
+            String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
             Account userAccount = accountManagement.findAccount(accountNumber.toUpperCase());
-            String transactionTypeInput = CustomUtils.validateTransactionTypeInput(scanner);
-            double amount = CustomUtils.validateTransactionAmount(scanner);
+            String transactionTypeInput = ValidationUtils.validateTransactionTypeInput(scanner);
+            double amount = ValidationUtils.validateTransactionAmount(scanner);
             double newBalance = transactionTypeInput.equals("1") ? userAccount.getBalance() + amount : userAccount.getBalance() - amount;
             String dateTime = LocalDateTime.now().format(formatter);
             printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
-            CustomUtils.validateTransactionConfirmation(scanner);
+            ValidationUtils.validateTransactionConfirmation(scanner);
             boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
             if (success) {
                 transactionManagement.addTransaction(new Transaction(userAccount.getAccountNumber(),
@@ -52,10 +52,10 @@ public class TransactionServices {
             } else {
                 System.out.println("Transaction failed! Check balance or account rules.");
             }
-        }catch (CustomExceptions.InvalidAccountException | CustomExceptions.InsufficientFundsExceptions | CustomExceptions.TypeSelectionException
-        | ArrayIndexOutOfBoundsException |CustomExceptions.IllegalAmountException ce){
+        }catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+        | ArrayIndexOutOfBoundsException | IllegalAmountException ce){
             System.out.println(ce.getMessage());
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
         }
@@ -65,14 +65,14 @@ public class TransactionServices {
         System.out.println("VIEW TRANSACTION HISTORY");
         System.out.println("========================");
         try{
-            String accountNumber = CustomUtils.validateAccountNumberInput(scanner);
+            String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
             Account account = accountManagement.findAccount(accountNumber.toUpperCase());
             ArrayList<Transaction> transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
             printTransactionHistory(account,transactions);
-        }catch (CustomExceptions.InvalidAccountException iae){
+        }catch (InvalidAccountException iae){
             System.out.println(iae.getMessage());
         }
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 
     public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {

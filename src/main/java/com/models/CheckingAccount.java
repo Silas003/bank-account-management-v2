@@ -1,5 +1,5 @@
 package com.models;
-import com.exceptions.CustomExceptions;
+import com.models.  exceptions.*;
 
 public class CheckingAccount extends Account {
 
@@ -50,32 +50,32 @@ public class CheckingAccount extends Account {
         return this.monthlyFee;
     }
 
-    public boolean hasOverdraftLimitExceeded(double amount) throws CustomExceptions.OverdraftLimitException , CustomExceptions.IllegalAmountException {
+    public boolean hasOverdraftLimitExceeded(double amount) throws OverdraftLimitException , IllegalAmountException {
         double overdraftLimit = this.getOverdraftLimit();
         double balance = getBalance();
-        if(amount < 0) throw new CustomExceptions.IllegalAmountException("Amount cannot be less than 0");
+        if(amount < 0) throw new IllegalAmountException("Amount cannot be less than 0");
         if (Math.abs(balance - amount) > overdraftLimit) {
-            throw new CustomExceptions.OverdraftLimitException("You can't withdraw more than your overdraft limit");
+            throw new OverdraftLimitException("You can't withdraw more than your overdraft limit");
 
         }
         return false;
     }
 
-    public  boolean deposit(double amount) throws CustomExceptions.IllegalAmountException {
-        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Deposit amount cannot be zero");
+    public  boolean deposit(double amount) throws IllegalAmountException {
+        if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
     }
 
-    public void withdraw(double amount) throws CustomExceptions.IllegalAmountException, CustomExceptions.OverdraftLimitException {
+    public void withdraw(double amount) throws IllegalAmountException, OverdraftLimitException {
         double balance = getBalance();
-        if (amount <= 0) throw new CustomExceptions.IllegalAmountException("Withdrawal amount cannot be zero");
+        if (amount <= 0) throw new IllegalAmountException("Withdrawal amount cannot be zero");
         hasOverdraftLimitExceeded(amount);
         this.setBalance(balance - amount);
     }
 
 
-    public boolean processTransactions(double amount, String type) throws CustomExceptions.IllegalAmountException, CustomExceptions.InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {
