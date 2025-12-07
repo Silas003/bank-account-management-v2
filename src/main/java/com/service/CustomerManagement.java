@@ -1,7 +1,5 @@
 package com.service;
-
 import com.models.Customer;
-
 import java.util.ArrayList;
 
 public class CustomerManagement {

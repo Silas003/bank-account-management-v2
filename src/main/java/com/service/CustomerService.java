@@ -1,8 +1,6 @@
 package com.service;
-
 import com.models.Customer;
-import com.utilities.CustomUtils;
-
+import com.utilities.ValidationUtils;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +20,7 @@ public class CustomerService {
         ArrayList<Customer> customers = customerManagement.getAllCustomers();
         if (customers.size() == 0) {
             System.out.println("No Customer in system.Returning to Main menu");
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
             return;
         }
 
@@ -36,7 +34,7 @@ public class CustomerService {
 
         System.out.println("========================================================\n");
         System.out.println("Total Customers: " + customerManagement.getCustomerSize());
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 
 }

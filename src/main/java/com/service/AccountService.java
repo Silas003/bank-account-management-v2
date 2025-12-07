@@ -1,7 +1,7 @@
 package com.service;
-
 import com.models.*;
-import com.utilities.CustomUtils;
+import com.models.exceptions.*;
+import com.utilities.ValidationUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,66 +31,47 @@ public class AccountService {
 
         System.out.println("ACCOUNT CREATION");
         System.out.println("====================================");
-        customerName = CustomUtils.validateCustomerNameInput(scanner);
-        if (customerName == null) return;
-        customerAge = CustomUtils.validateCustomerAgeInput(scanner);
-        if (customerAge == -1) return;
-        customerContact = CustomUtils.validateCustomerContactInput(scanner);
-        if (customerContact == null) return;
-        customerAddress = CustomUtils.validateCustomerAddressInput(scanner);
-        if (customerAddress == null) return;
-        String customerTypeInput = CustomUtils.validateCustomerTypeInput(scanner);
-        if (customerTypeInput == null) return;
-        String accounTypeInput = CustomUtils.validateAccountTypeInput(scanner);
-        if (accounTypeInput == null) return;
+        try{
+            customerName = ValidationUtils.validateCustomerNameInput(scanner);
+            customerAge = ValidationUtils.validateCustomerAgeInput(scanner);
+            customerContact = ValidationUtils.validateCustomerContactInput(scanner);
+            customerAddress = ValidationUtils.validateCustomerAddressInput(scanner);
+            String customerTypeInput = ValidationUtils.validateCustomerTypeInput(scanner);
+            String accounTypeInput = ValidationUtils.validateAccountTypeInput(scanner);
+            double initialDepositAmount = ValidationUtils.validateInitialDepositInput(scanner, customerTypeInput, accounTypeInput);
 
-        double initialDepositAmount = CustomUtils.validateInitialDepositInput(scanner, customerTypeInput, accounTypeInput);
 
-        Customer customer;
-        switch (customerTypeInput) {
-            case "1":
-                customer = new RegularCustomer(customerName, customerAge, customerContact, customerAddress, "Regular");
-                break;
-            case "2":
-                customer = new PremiumCustomer(customerName, customerAge, customerContact, customerAddress,"Premium");
-                break;
-            default:
-                System.out.println("Invalid customer type. Account creation aborted.");
-                return;
-        }
+            Customer customer;
+            customer = customerTypeInput.equals("1") ? new RegularCustomer(customerName, customerAge, customerContact, customerAddress, "Regular") :
+                    new PremiumCustomer(customerName, customerAge, customerContact, customerAddress,"Premium");
 
-        Account newAccount;
-        switch (accounTypeInput) {
-            case "1":
-                newAccount = new SavingsAccount(customer, initialDepositAmount);
-                break;
-            case "2":
-                newAccount = new CheckingAccount(customer, initialDepositAmount);
-                break;
-            default:
-                System.out.println("Invalid account type. Please select 1 or 2.");
-                return;
-        }
+            Account newAccount;
+            newAccount = accounTypeInput.equals("1") ? new SavingsAccount(customer, initialDepositAmount) : new CheckingAccount(customer, initialDepositAmount);
 
-        customerManagement.addCustomer(customer);
-        accountManagement.addAccount(newAccount);
-        String dateTime = LocalDateTime.now().format(formatter);
-        boolean success = newAccount.processTransactions(initialDepositAmount, "Deposit");
-        if (success) {
+            customerManagement.addCustomer(customer);
+            accountManagement.addAccount(newAccount);
+            String dateTime = LocalDateTime.now().format(formatter);
             transactionManagement.addTransaction(new Transaction(newAccount.getAccountNumber(),
-                    "Deposit",
-                    initialDepositAmount,
-                    initialDepositAmount,
-                    dateTime));
+                        "Deposit",
+                        initialDepositAmount,
+                        initialDepositAmount,
+                        dateTime));
 
-        } else {
-            System.out.println("Transaction failed! Check balance or account rules.");
+            System.out.println("Account created successfully!");
+            System.out.println(newAccount.displayAccountDetails());
+
+            ValidationUtils.promptEnterKey(scanner);
+
+        } catch (CustomerNameException | CustomerAddressException | CustomerAgeException |
+                 TypeSelectionException | CustomerContactException | IllegalAmountException ce){
+            System.out.println(ce.getMessage());
+            ValidationUtils.promptEnterKey(scanner);
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        System.out.println("Account created successfully!");
-        System.out.println(newAccount.displayAccountDetails());
-
-        CustomUtils.promptEnterKey(scanner);
     }
+
+
 
     public void viewAllAccounts() {
         System.out.println("ACCOUNT LISTING");
@@ -99,9 +80,9 @@ public class AccountService {
         System.out.println("====================================================");
 
         Account[] allAccounts = accountManagement.viewAllAccounts();
-        if(allAccounts.length ==0){
+        if(allAccounts.length == 0){
             System.out.println("No Account In System.Returning to Main menu");
-            CustomUtils.promptEnterKey(scanner);
+            ValidationUtils.promptEnterKey(scanner);
             return;
         }
         for (int i = 0; i < accountManagement.accountCount; i++) {
@@ -117,6 +98,6 @@ public class AccountService {
 
         System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",
                 accountManagement.getAccountCount(), accountManagement.getTotalBalance());
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 }

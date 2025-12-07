@@ -1,5 +1,4 @@
 package com.service;
-
 import com.models.Transaction;
 
 import java.util.ArrayList;
@@ -12,9 +11,13 @@ public class TransactionManagement {
     public Transaction transactions[] = new Transaction[200];
     public int transactionCount;
 
-    public void addTransaction(Transaction transaction) {
-        transactions[transactionCount] = transaction;
-        transactionCount++;
+    public void addTransaction(Transaction transaction) throws ArrayIndexOutOfBoundsException{
+        if(!(transactionCount >= 200)) {
+            transactions[transactionCount] = transaction;
+            transactionCount++;
+        }else{
+            throw new ArrayIndexOutOfBoundsException("List Full.Cannot append more accounts to transactions list.");
+        }
     }
 
     public ArrayList<Transaction> viewTransactionByAccount(String accountNumber) {
@@ -27,6 +30,12 @@ public class TransactionManagement {
             }
         }
         return accountTransactions;
+    }
+
+    public void calculateTotalDeposits(String accountNumber) {
+    }
+
+    public void calculateTotalWithdrawals(String accountNumber) {
     }
 
     public int getTransactionCount() {

@@ -1,8 +1,8 @@
 package com.service;
-
+import com.models.exceptions.*;
 import com.models.Account;
 import com.models.Transaction;
-import com.utilities.CustomUtils;
+import com.utilities.ValidationUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,41 +33,33 @@ public class TransactionServices {
         System.out.println("DEPOSIT/WITHDRAWAL");
         System.out.println("==================");
 
-        String accountNumber = CustomUtils.validateAccountNumberInput(scanner);
-        if (accountNumber == null) return;
-        Account userAccount = accountManagement.findAccount(accountNumber.toUpperCase());
-        if (userAccount == null) {
-            System.out.println("Account not found. Returning to main menu");
-            return;
+        try {
+            String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
+            Account userAccount = accountManagement.findAccount(accountNumber.toUpperCase());
+            String transactionTypeInput = ValidationUtils.validateTransactionTypeInput(scanner);
+            double amount = ValidationUtils.validateTransactionAmount(scanner);
+            double newBalance = transactionTypeInput.equals("1") ? userAccount.getBalance() + amount : userAccount.getBalance() - amount;
+            String dateTime = LocalDateTime.now().format(formatter);
+            printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
+            ValidationUtils.validateTransactionConfirmation(scanner);
+            boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
+            if (success) {
+                transactionManagement.addTransaction(new Transaction(userAccount.getAccountNumber(),
+                        transactionType.get(transactionTypeInput),
+                        amount,
+                        userAccount.getBalance(),
+                        dateTime));
+                System.out.println("Transaction successful!");
+            } else {
+                System.out.println("Transaction failed! Check balance or account rules.");
+            }
+        }catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+        | ArrayIndexOutOfBoundsException | IllegalAmountException ce){
+            System.out.println(ce.getMessage());
+            ValidationUtils.promptEnterKey(scanner);
+        }catch (RuntimeException re){
+            System.out.println(re.getMessage());
         }
-
-        String transactionTypeInput = CustomUtils.validateTransactionTypeInput(scanner);
-        if (transactionTypeInput == null) return;
-
-        double amount = CustomUtils.validateTransactionAmount(scanner);
-        if (amount == -1) return;
-
-        double newBalance = transactionTypeInput.equals("1") ? userAccount.getBalance() + amount : userAccount.getBalance() - amount;
-        String dateTime = LocalDateTime.now().format(formatter);
-
-        printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
-
-        String confirmation = CustomUtils.validateTransactionConfirmation(scanner);
-        if (confirmation == null || confirmation.equalsIgnoreCase("N")) return;
-
-        boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
-        if (success) {
-            transactionManagement.addTransaction(new Transaction(userAccount.getAccountNumber(),
-                    transactionType.get(transactionTypeInput),
-                    amount,
-                    userAccount.getBalance(),
-                    dateTime));
-            System.out.println("Transaction successful!");
-        } else {
-            System.out.println("Transaction failed! Check balance or account rules.");
-        }
-
-        CustomUtils.promptEnterKey(scanner);
     }
 
     public void transferToOtherAccounts() {
@@ -81,21 +73,32 @@ public class TransactionServices {
     public void viewTransactionHistory() {
         System.out.println("VIEW TRANSACTION HISTORY");
         System.out.println("========================");
-        String accountNumber = CustomUtils.validateAccountNumberInput(scanner);
-        if (accountNumber == null) return;
-        if (accountManagement.findAccount(accountNumber.toUpperCase()) == null) {
-            System.out.println("Account not found. Returning to main menu");
-            return;
+        try{
+            String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
+            Account account = accountManagement.findAccount(accountNumber.toUpperCase());
+            ArrayList<Transaction> transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+            printTransactionHistory(account,transactions);
+        }catch (InvalidAccountException iae){
+            System.out.println(iae.getMessage());
         }
-        Account account = accountManagement.findAccount(accountNumber.toUpperCase());
+        ValidationUtils.promptEnterKey(scanner);
+    }
 
-        ArrayList<Transaction> transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+    public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
+        System.out.println("TRANSACTION CONFIRMATION");
+        System.out.println("========================");
+        System.out.printf("Transaction ID: TNX00%d\n", transactionManagement.getTransactionCount());
+        System.out.printf("Account: %s\n", account.getAccountNumber());
+        System.out.printf("Type: %s\n", type);
+        System.out.printf("Amount: $%.2f\n", amount);
+        System.out.printf("Previous Balance: $%.2f\n", account.getBalance());
+        System.out.printf("New Balance: $%.2f\n", newBalance);
+        System.out.printf("Date/Time: %s\n", dateTime);
+    }
+
+    public void printTransactionHistory(Account account,ArrayList<Transaction> transactions){
         double totalDeposits = 0;
         double totalWithdrawals = 0;
-        if (transactions.size() == 0) {
-            System.out.println("No transactions recorded for this account");
-            return;
-        }
         System.out.printf("Account: %s - %s\nAccount Type: %s\nCurrent Balance: %.2f\n\n",
                 account.getAccountNumber(), account.getCustomer(), account.getAccountType(), account.getBalance());
         System.out.println("TRANSACTION HISTORY");
