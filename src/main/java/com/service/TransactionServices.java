@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * Service layer for transaction-related operations.
+ */
 public class TransactionServices {
 
     private final AccountManagement accountManagement;
     private final TransactionManagement transactionManagement;
     private final Scanner scanner;
-
-
     private final HashMap<String, String> transactionType = new HashMap<>();
 
     public TransactionServices(AccountManagement accountManagement, TransactionManagement transactionManagement, Scanner scanner) {
@@ -27,10 +28,10 @@ public class TransactionServices {
         transactionType.put("2", "Withdrawal");
     }
 
-    public void processTransaction() {
+    public void processDepositWithdrawal() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        System.out.println("PROCESS TRANSACTION");
-        System.out.println("===================");
+        System.out.println("DEPOSIT/WITHDRAWAL");
+        System.out.println("==================");
 
         try {
             String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
@@ -59,6 +60,14 @@ public class TransactionServices {
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
         }
+    }
+
+    public void transferToOtherAccounts() {
+        System.out.println("TRANSFER TO OTHER ACCOUNTS");
+        System.out.println("==========================");
+        System.out.println("This feature is coming soon!");
+        System.out.println("You will be able to transfer funds between accounts here.");
+        CustomUtils.promptEnterKey(scanner);
     }
 
     public void viewTransactionHistory() {
@@ -110,5 +119,19 @@ public class TransactionServices {
         System.out.println("Total Deposits: " + totalDeposits);
         System.out.println("Total Withdrawals: " + totalWithdrawals);
         System.out.println("Net Change: " + (totalDeposits - totalWithdrawals));
+
+        CustomUtils.promptEnterKey(scanner);
+    }
+
+    public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
+        System.out.println("TRANSACTION CONFIRMATION");
+        System.out.println("========================");
+        System.out.printf("Transaction ID: TNX00%d\n", transactionManagement.getTransactionCount());
+        System.out.printf("Account: %s\n", account.getAccountNumber());
+        System.out.printf("Type: %s\n", type);
+        System.out.printf("Amount: $%.2f\n", amount);
+        System.out.printf("Previous Balance: $%.2f\n", account.getBalance());
+        System.out.printf("New Balance: $%.2f\n", newBalance);
+        System.out.printf("Date/Time: %s\n", dateTime);
     }
 }

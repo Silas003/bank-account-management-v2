@@ -2,6 +2,10 @@ package com.service;
 import com.models.*;
 import com.models.exceptions.*;
 
+/**
+ * Management layer for account data operations and storage.
+ */
+
 public class AccountManagement {
 
     private static Account[] accounts = new Account[50];
@@ -30,7 +34,7 @@ public class AccountManagement {
     public double getTotalBalance() {
         double totalBalance = 0;
         Account account;
-        System.out.println(accountCount); // Debug print statement
+        System.out.println(accountCount);
         for (int i = 0; i < accountCount; i++) {
             account = accounts[i];
             totalBalance += account.getBalance();

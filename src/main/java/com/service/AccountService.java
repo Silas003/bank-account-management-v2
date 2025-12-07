@@ -7,13 +7,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+/**
+ * Service layer for account-related business operations and user interactions.
+ */
 public class AccountService {
 
     private final AccountManagement accountManagement;
     private final TransactionManagement transactionManagement;
-    private  final CustomerManagement customerManagement;
+    private final CustomerManagement customerManagement;
     private final Scanner scanner;
-
 
     public AccountService(AccountManagement accountManagement,TransactionManagement transactionManagement,CustomerManagement customerManagement ,Scanner scanner) {
         this.accountManagement = accountManagement;
@@ -21,7 +23,6 @@ public class AccountService {
         this.scanner = scanner;
         this.customerManagement = customerManagement;
     }
-
 
     public void createAccount() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");

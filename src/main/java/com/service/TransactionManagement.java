@@ -3,13 +3,16 @@ import com.models.Transaction;
 
 import java.util.ArrayList;
 
+/**
+ * Management layer for transaction data operations and storage.
+ */
 public class TransactionManagement {
 
     public Transaction transactions[] = new Transaction[200];
     public int transactionCount;
 
     public void addTransaction(Transaction transaction) throws ArrayIndexOutOfBoundsException{
-        if(!(transactions.length == 200)) {
+        if(!(transactionCount >= 200)) {
             transactions[transactionCount] = transaction;
             transactionCount++;
         }else{

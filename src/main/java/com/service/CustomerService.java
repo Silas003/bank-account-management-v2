@@ -4,6 +4,9 @@ import com.utilities.ValidationUtils;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Service layer for customer-related operations.
+ */
 public class CustomerService {
     private final CustomerManagement customerManagement;
     private final Scanner scanner;
