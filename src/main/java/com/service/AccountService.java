@@ -1,4 +1,3 @@
-
 package com.service;
 
 import com.models.*;
@@ -8,29 +7,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-// Service layer for account-related business operations and user interactions.
-// Provides high-level account management functionality, coordinating between
-// the user interface (via Scanner) and the data management layer (AccountManagement).
-// Handles the complete account creation workflow and account listing operations.
-//
-// Key responsibilities:
-// - Account creation with customer information collection
-// - Account listing and display
-// - User input validation coordination
-// - Customer and account type selection
-//
-// The service validates all user inputs through utility methods before proceeding
-// with account creation, ensuring data integrity and providing user-friendly error messages.
+/**
+ * Service layer for account-related business operations and user interactions.
+ */
 public class AccountService {
 
-    // Data management layer for account operations
     private final AccountManagement accountManagement;
     private final TransactionManagement transactionManagement;
-    private  final CustomerManagement customerManagement;
-    // Scanner instance for reading user input
+    private final CustomerManagement customerManagement;
     private final Scanner scanner;
 
-    // Constructs a new AccountService with the provided dependencies.
     public AccountService(AccountManagement accountManagement,TransactionManagement transactionManagement,CustomerManagement customerManagement ,Scanner scanner) {
         this.accountManagement = accountManagement;
         this.transactionManagement = transactionManagement;
@@ -38,14 +24,6 @@ public class AccountService {
         this.customerManagement = customerManagement;
     }
 
-    // Guides the user through the account creation process.
-    // Workflow:
-    // 1. Collect and validate customer information (name, age, contact, address)
-    // 2. Prompt for customer type (Regular or Premium)
-    // 3. Prompt for account type (Savings or Checking)
-    // 4. Validate initial deposit amount based on requirements
-    // 5. Create Customer and Account objects
-    // 6. Add account to the system and display confirmation
     public void createAccount() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String customerName, customerAddress, customerContact;
@@ -68,7 +46,6 @@ public class AccountService {
 
         double initialDepositAmount = CustomUtils.validateInitialDepositInput(scanner, customerTypeInput, accounTypeInput);
 
-        // Determine customer type
         Customer customer;
         switch (customerTypeInput) {
             case "1":
@@ -82,7 +59,6 @@ public class AccountService {
                 return;
         }
 
-        // Determine account type
         Account newAccount;
         switch (accounTypeInput) {
             case "1":
@@ -96,7 +72,6 @@ public class AccountService {
                 return;
         }
 
-        // Add account and display confirmation
         customerManagement.addCustomer(customer);
         accountManagement.addAccount(newAccount);
         String dateTime = LocalDateTime.now().format(formatter);
@@ -117,9 +92,6 @@ public class AccountService {
         CustomUtils.promptEnterKey(scanner);
     }
 
-    // Displays a formatted listing of all accounts in the system.
-    // Shows account number, customer name, account type, balance, status, and account-specific details.
-    // Also displays summary info: total accounts and total balance.
     public void viewAllAccounts() {
         System.out.println("ACCOUNT LISTING");
         System.out.println("====================================================");
