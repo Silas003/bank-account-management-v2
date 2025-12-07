@@ -67,7 +67,7 @@ public class TransactionServices {
         System.out.println("==========================");
         System.out.println("This feature is coming soon!");
         System.out.println("You will be able to transfer funds between accounts here.");
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 
     public void viewTransactionHistory() {
@@ -82,18 +82,6 @@ public class TransactionServices {
             System.out.println(iae.getMessage());
         }
         ValidationUtils.promptEnterKey(scanner);
-    }
-
-    public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
-        System.out.println("TRANSACTION CONFIRMATION");
-        System.out.println("========================");
-        System.out.printf("Transaction ID: TNX00%d\n", transactionManagement.getTransactionCount());
-        System.out.printf("Account: %s\n", account.getAccountNumber());
-        System.out.printf("Type: %s\n", type);
-        System.out.printf("Amount: $%.2f\n", amount);
-        System.out.printf("Previous Balance: $%.2f\n", account.getBalance());
-        System.out.printf("New Balance: $%.2f\n", newBalance);
-        System.out.printf("Date/Time: %s\n", dateTime);
     }
 
     public void printTransactionHistory(Account account,ArrayList<Transaction> transactions){
@@ -120,7 +108,7 @@ public class TransactionServices {
         System.out.println("Total Withdrawals: " + totalWithdrawals);
         System.out.println("Net Change: " + (totalDeposits - totalWithdrawals));
 
-        CustomUtils.promptEnterKey(scanner);
+        ValidationUtils.promptEnterKey(scanner);
     }
 
     public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
