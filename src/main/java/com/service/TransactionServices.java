@@ -1,4 +1,3 @@
-
 package com.service;
 
 import com.models.Account;
@@ -11,33 +10,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-// Service layer for transaction-related operations.
-// Responsibilities:
-// - Transaction processing (deposits and withdrawals)
-// - Transaction validation and confirmation
-// - Transaction history retrieval and display
-// - Transaction summary generation
-//
-// The service validates account existence, transaction amounts, and obtains user
-// confirmation before processing transactions. All transactions are recorded with
-// timestamps for audit purposes.
+/**
+ * Service layer for transaction-related operations.
+ */
 public class TransactionServices {
 
-    // Data management layer for account operations
     private final AccountManagement accountManagement;
-
-    // Data management layer for transaction operations
     private final TransactionManagement transactionManagement;
-
-    // Scanner instance for reading user input
     private final Scanner scanner;
-
-    // Map of user input choices to transaction type strings
     private final HashMap<String, String> transactionType = new HashMap<>();
 
-    // Constructs a new TransactionServices with the provided dependencies.
-    // Initializes the transaction type mapping for user input conversion:
-    // "1" -> "Deposit", "2" -> "Withdrawal"
     public TransactionServices(AccountManagement accountManagement, TransactionManagement transactionManagement, Scanner scanner) {
         this.accountManagement = accountManagement;
         this.transactionManagement = transactionManagement;
@@ -46,13 +28,10 @@ public class TransactionServices {
         transactionType.put("2", "Withdrawal");
     }
 
-    // Processes a transaction (deposit or withdrawal).
-    // Validates account number, transaction type, and amount.
-    // Displays a summary for confirmation before processing.
-    public void processTransaction() {
+    public void processDepositWithdrawal() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        System.out.println("PROCESS TRANSACTION");
-        System.out.println("===================");
+        System.out.println("DEPOSIT/WITHDRAWAL");
+        System.out.println("==================");
 
         String accountNumber = CustomUtils.validateAccountNumberInput(scanner);
         if (accountNumber == null) return;
@@ -91,8 +70,14 @@ public class TransactionServices {
         CustomUtils.promptEnterKey(scanner);
     }
 
-    // Displays the complete transaction history for a specific account.
-    // Shows all transactions, totals for deposits and withdrawals, and net change.
+    public void transferToOtherAccounts() {
+        System.out.println("TRANSFER TO OTHER ACCOUNTS");
+        System.out.println("==========================");
+        System.out.println("This feature is coming soon!");
+        System.out.println("You will be able to transfer funds between accounts here.");
+        CustomUtils.promptEnterKey(scanner);
+    }
+
     public void viewTransactionHistory() {
         System.out.println("VIEW TRANSACTION HISTORY");
         System.out.println("========================");
@@ -135,8 +120,6 @@ public class TransactionServices {
         CustomUtils.promptEnterKey(scanner);
     }
 
-    // Displays a summary of the transaction before confirmation.
-    // Shows transaction details: ID, account, type, amount, previous balance, new balance, and timestamp.
     public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
         System.out.println("TRANSACTION CONFIRMATION");
         System.out.println("========================");

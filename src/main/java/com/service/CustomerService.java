@@ -6,6 +6,9 @@ import com.utilities.CustomUtils;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Service layer for customer-related operations.
+ */
 public class CustomerService {
     private final CustomerManagement customerManagement;
     private final Scanner scanner;
@@ -28,10 +31,6 @@ public class CustomerService {
         System.out.println("CUSTOMER ID | NAME    | TYPE  | CONTACT    | ADDRESS");
 
         for (Customer customer : customers) {
-
-//            System.out.printf("%s |%s |%s  |%s |%s\n",
-//                    customer.getCustomerId(), customer.getName(), customer.getContact(),
-//                    customer.getAddress());
             System.out.printf("%s",customer.displayCustomerDetails());
         }
 
