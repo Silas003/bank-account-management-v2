@@ -1,9 +1,11 @@
 package com.service;
-import com.models.Account;
+import com.models.*;
+import com.models.exceptions.*;
 
 /**
  * Management layer for account data operations and storage.
  */
+
 public class AccountManagement {
 
     private static Account[] accounts = new Account[50];
@@ -17,12 +19,12 @@ public class AccountManagement {
         }
     }
 
-    public static Account findAccount(String accountNumber) {
+    public static Account findAccount(String accountNumber) throws InvalidAccountException {
         for (int i = 0; i < accountCount; i++) {
             Account account = accounts[i];
             if (account.getAccountNumber().equals(accountNumber)) return account;
         }
-        return null;
+        throw new InvalidAccountException("Account Number not found.Returning to main menu");
     }
 
     public static Account[] viewAllAccounts() {

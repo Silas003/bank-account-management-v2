@@ -1,12 +1,11 @@
 package com.handlers;
-
 import com.service.*;
-
 import java.util.Scanner;
 
 /**
  * Application handler that manages the main menu and user interaction flow.
  */
+
 public class AppHandler {
 
     private final AccountService accountService;
