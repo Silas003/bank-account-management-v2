@@ -1,4 +1,5 @@
 package com.handlers;
+import com.CustomRunner;
 import com.service.*;
 import java.util.Scanner;
 
@@ -33,8 +34,9 @@ public class AppHandler {
 
             System.out.println("\n1. Manage Accounts");
             System.out.println("2. Perform Transaction");
-            System.out.println("3. Generate Account Statement");
-            System.out.println("4. Exit");
+            System.out.println("3. Generate Account Statements");
+            System.out.println("4. Run Tests");
+            System.out.println("5. Exit");
 
             System.out.print("Enter choice: ");
             String choice = scanner.nextLine();
@@ -53,9 +55,13 @@ public class AppHandler {
                     transactionService.viewTransactionHistory(); 
                     yield true; 
                 }
-                case "4" -> { 
-                    System.out.println("Thank you for using Bank Account Management System!\nGoodbye!"); 
-                    yield false; 
+                case "4" -> {
+                    CustomRunner.runAllTestsInPackage();
+                    yield true;
+                }
+                case "5" -> {
+                    System.out.println("Thank you for using Bank Account Management System!\nGoodbye!");
+                    yield false;
                 }
                 default -> { 
                     System.out.println("Please select a number between [1-4]"); 

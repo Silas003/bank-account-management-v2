@@ -1,6 +1,5 @@
+package com;
 import com.handlers.AppHandler;
-
-
 /**
  * Main entry point for the Bank Account Management System.
  */

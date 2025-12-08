@@ -57,7 +57,7 @@ public class CheckingAccount extends Account {
         double overdraftLimit = this.getOverdraftLimit();
         double balance = getBalance();
         if(amount < 0) throw new IllegalAmountException("Amount cannot be less than 0");
-        if (Math.abs(balance - amount) > overdraftLimit) {
+        if (balance - amount < -overdraftLimit) {
             throw new OverdraftLimitException("You can't withdraw more than your overdraft limit");
         }
         return false;
