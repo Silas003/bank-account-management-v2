@@ -74,18 +74,19 @@ public class AccountService {
 
 
     public void viewAllAccounts() {
+        
+        if(accountManagement.getAccountCount() <= 0){
+            System.out.println("No Account In System.Returning to Main menu");
+            ValidationUtils.promptEnterKey(scanner);
+            return;
+        }
         System.out.println("ACCOUNT LISTING");
         System.out.println("====================================================");
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
         Account[] allAccounts = accountManagement.viewAllAccounts();
-        if(allAccounts.length == 0){
-            System.out.println("No Account In System.Returning to Main menu");
-            ValidationUtils.promptEnterKey(scanner);
-            return;
-        }
-        for (int i = 0; i < accountManagement.accountCount; i++) {
+        for (int i = 0; i < accountManagement.getAccountCount(); i++) {
             Account account = allAccounts[i];
             System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
                     account.getAccountNumber(),
