@@ -126,7 +126,7 @@ A **Java-based console application** for managing bank accounts, customers, and 
 The `AppHandler` class manages the main menu:
 - Manage Accounts
 - Perform Transaction
-- **Generate Account Statements
+- Generate Account Statements
 - Run Tests
 - Exit
 
