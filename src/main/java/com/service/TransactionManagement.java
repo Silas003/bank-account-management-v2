@@ -1,7 +1,9 @@
+
 package com.service;
 import com.models.Transaction;
 
 import java.util.ArrayList;
+
 
 /**
  * Management layer for transaction data operations and storage.
@@ -32,11 +34,6 @@ public class TransactionManagement {
         return accountTransactions;
     }
 
-    public void calculateTotalDeposits(String accountNumber) {
-    }
-
-    public void calculateTotalWithdrawals(String accountNumber) {
-    }
 
     public int getTransactionCount() {
         return this.transactionCount;

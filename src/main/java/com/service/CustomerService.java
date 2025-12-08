@@ -7,6 +7,7 @@ import java.util.Scanner;
 /**
  * Service layer for customer-related operations.
  */
+
 public class CustomerService {
     private final CustomerManagement customerManagement;
     private final Scanner scanner;
@@ -21,6 +22,7 @@ public class CustomerService {
         if (customers.size() == 0) {
             System.out.println("No Customer in system.Returning to Main menu");
             ValidationUtils.promptEnterKey(scanner);
+
             return;
         }
 
@@ -34,7 +36,9 @@ public class CustomerService {
 
         System.out.println("========================================================\n");
         System.out.println("Total Customers: " + customerManagement.getCustomerSize());
+
         ValidationUtils.promptEnterKey(scanner);
+
     }
 
 }

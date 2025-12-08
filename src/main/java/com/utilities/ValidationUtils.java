@@ -152,7 +152,7 @@ public class ValidationUtils {
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter customer contact: ");
             String contact = scanner.nextLine();
-            if (!contact.isBlank() && contact.matches("^[0-9]+$") && contact.length() <= 10) return contact;
+            if (!contact.isBlank() && contact.matches("^[0-9]+$") && contact.length() == 10) return contact;
             System.out.println("Invalid contact. Must contain only digits and be 10 digits long.");
         }
         throw new CustomerContactException("Too many invalid attempts. Returning to main menu.");

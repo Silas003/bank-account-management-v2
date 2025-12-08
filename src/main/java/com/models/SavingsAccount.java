@@ -11,6 +11,7 @@ public class SavingsAccount extends Account {
         this.minimumBalance = 500;
     }
 
+
     public SavingsAccount(Customer customer, double balance) {
         this();
         setCustomer(customer);
@@ -31,10 +32,12 @@ public class SavingsAccount extends Account {
                 (this.interestRate * 100), this.minimumBalance, this.getStatus());
     }
 
+
     @Override
     public String getAccountType() {
         return "Savings";
     }
+
 
     public  boolean deposit(double amount) throws IllegalAmountException {
         if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
@@ -42,12 +45,14 @@ public class SavingsAccount extends Account {
         return true;
     }
 
+
     @Override
     public void withdraw(double amount) throws InsufficientFundsExceptions, IllegalAmountException{
         double balance = getBalance();
         if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         if (balance != 0 && (balance - amount < 0)) {
             throw new InsufficientFundsExceptions("You can't withdraw below a balance of 0");
+
         } else {
             setBalance(balance - amount);
         }
@@ -58,27 +63,31 @@ public class SavingsAccount extends Account {
         return balance * this.interestRate;
     }
 
+
     private String getInterestRate() {
         return String.format("%.1f%%", interestRate * 100);
     }
 
+
     public double getMinimumBalance() {
         return minimumBalance;
     }
+
 
     @Override
     public String getAccountSpecificDetails() {
         return String.format("Interest Rate: %s Min Balance:$ %.2f", getInterestRate(), getMinimumBalance());
     }
 
+
     public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
+
         if ("Deposit".equalsIgnoreCase(type)) {
             return deposit(amount);
         } else if ("Withdrawal".equalsIgnoreCase(type)) {
-            if (getBalance() - amount >= getMinimumBalance()) {
                 withdraw(amount);
                 return true;
-            } throw new InsufficientFundsExceptions("You cannot withdraw more than your minimum allowed balance");
+
         }
         return false;
     }

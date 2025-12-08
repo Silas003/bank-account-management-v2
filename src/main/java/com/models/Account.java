@@ -9,16 +9,19 @@ public abstract class Account implements Transactable {
     private String status;
     public static int accountCounter;
 
+
     Account() {
         setAccountNumber();
 
     }
+
 
     public abstract String displayAccountDetails();
 
     public abstract String getAccountType();
 
     public abstract String getAccountSpecificDetails();
+
 
     private void generateAccountNumber() {
         this.accountNumber = "ACC00" + ++accountCounter;
@@ -64,13 +67,16 @@ public abstract class Account implements Transactable {
 
     public abstract void withdraw (double amount)throws IllegalAmountException, InsufficientFundsExceptions;
 
+
     @Override
     public String toString() {
         return String.format("Customer: %s\nAccount Type:%s\nCurrent Balance: %.2f",
                 getCustomer(), getAccountType(), getBalance());
     }
 
+
     public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
+
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {

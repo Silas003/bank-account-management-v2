@@ -10,6 +10,7 @@ public abstract class Customer {
     private String address;
     static int customerCounter;
 
+
     Customer() {
         setCustomerId();
     }
@@ -18,6 +19,7 @@ public abstract class Customer {
     public String toString() {
         return String.format("%s ", this.getName());
     }
+
 
     Customer(String name, int age, String contact, String address,String type) {
         this();
@@ -28,9 +30,11 @@ public abstract class Customer {
         setType(type);
     }
 
+
     public String getCustomerId() {
         return this.customerId;
     }
+
 
     public void setCustomerId() {
         this.customerId = "CUS00" + ++customerCounter;
@@ -39,6 +43,7 @@ public abstract class Customer {
     public String getName() {
         return this.name;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -52,6 +57,7 @@ public abstract class Customer {
         this.age = age;
     }
 
+
     public String getContact() {
         return this.contact;
     }
@@ -59,6 +65,7 @@ public abstract class Customer {
     public void setContact(String contact) {
         this.contact = contact;
     }
+
 
     public String getAddress() {
         return this.address;
@@ -71,6 +78,7 @@ public abstract class Customer {
     public  void setType(String type){
         this.type = type;
     }
+
 
     public abstract String displayCustomerDetails();
 

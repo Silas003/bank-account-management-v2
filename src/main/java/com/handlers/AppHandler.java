@@ -24,21 +24,23 @@ public class AppHandler {
         submenuHandler = new SubmenuHandler(scanner, accountService, transactionService, customerService);
     }
 
-
     public void start() {
         boolean running = true;
         System.out.println("||====================================||");
         System.out.println("  BANK ACCOUNT MANAGEMENT - MAIN MENU");
         System.out.println("||====================================||");
         while (running) {
+
             System.out.println("\n1. Manage Accounts");
             System.out.println("2. Perform Transaction");
             System.out.println("3. Generate Account Statement");
             System.out.println("4. Exit");
+
             System.out.print("Enter choice: ");
             String choice = scanner.nextLine();
 
             running = switch (choice) {
+
                 case "1" -> { 
                     submenuHandler.manageAccounts(); 
                     yield true; 
@@ -59,6 +61,7 @@ public class AppHandler {
                     System.out.println("Please select a number between [1-4]"); 
                     yield true; 
                 }
+
             };
         }
     }

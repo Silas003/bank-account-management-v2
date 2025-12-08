@@ -71,7 +71,7 @@ public class TransactionServices {
     }
 
     public void viewTransactionHistory() {
-        System.out.println("VIEW TRANSACTION HISTORY");
+        System.out.println("GENERATE ACCOUNT STATEMENT");
         System.out.println("========================");
         try{
             String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
@@ -108,8 +108,10 @@ public class TransactionServices {
         System.out.println("Total Withdrawals: " + totalWithdrawals);
         System.out.println("Net Change: " + (totalDeposits - totalWithdrawals));
 
+
         ValidationUtils.promptEnterKey(scanner);
     }
+
 
     public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
         System.out.println("TRANSACTION CONFIRMATION");
