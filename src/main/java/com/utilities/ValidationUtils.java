@@ -203,7 +203,7 @@ public class ValidationUtils {
 
     }
 
-    public static String validaeCustomerEmail(Scanner scanner){
+    public static String validateCustomerEmail(Scanner scanner) throws CustomerEmailException{
         String customerEmail;
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter customer email: ");
@@ -212,7 +212,7 @@ public class ValidationUtils {
                 System.out.println("Invalid Customer email. eg: name@example.com");
             } else return customerEmail;
         }
-        throw new CustomerNameException("Too many invalid customer email attempts. Returning to main menu.");
+        throw new CustomerEmailException("Too many invalid customer email attempts. Returning to main menu.");
     }
 
     /*

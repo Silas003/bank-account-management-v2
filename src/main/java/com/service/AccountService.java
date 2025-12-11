@@ -39,7 +39,7 @@ public class AccountService {
             customerName = ValidationUtils.validateCustomerNameInput(scanner);
             customerAge = ValidationUtils.validateCustomerAgeInput(scanner);
             customerContact = ValidationUtils.validateCustomerContactInput(scanner);
-            customerEmail = ValidationUtils.validaeCustomerEmail(scanner);
+            customerEmail = ValidationUtils.validateCustomerEmail(scanner);
             customerAddress = ValidationUtils.validateCustomerAddressInput(scanner);
             String customerTypeInput = ValidationUtils.validateCustomerTypeInput(scanner);
             String accounTypeInput = ValidationUtils.validateAccountTypeInput(scanner);
