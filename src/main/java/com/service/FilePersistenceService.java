@@ -25,6 +25,13 @@ public class FilePersistenceService {
         Files.write(path,List.of(convertToString(account)),StandardCharsets.UTF_8,StandardOpenOption.APPEND);
     }
 
+    public static void readFromFile(String filepath) throws IOException{
+        Path path = getOrCreateFile(filepath);
+        List<String> readData = Files.readAllLines(path);
+        
+        readData.stream().map(p->p.trim().split(","))
+                .forEach(p-> System.out.println(Arrays.toString(p)));
+    }
     private static String convertToString(Account account){
         return String.format("%s,%s,%s,$%.2f,%s,%s",
                 account.getAccountNumber(),
