@@ -45,11 +45,11 @@ class TransactionManagementTest {
 
         management.addTransaction(initialDepositForAcc001);
         assertEquals(1, management.getTransactionCount(), "Count should be 1 after first add");
-        assertSame(initialDepositForAcc001, management.transactions[0], "First slot should hold the first transaction");
+        assertSame(initialDepositForAcc001, management.transactions.get(0), "First slot should hold the first transaction");
 
         management.addTransaction(withdrawalForAcc001);
         assertEquals(2, management.getTransactionCount(), "Count should be 2 after second add");
-        assertSame(withdrawalForAcc001, management.transactions[1], "Second slot should hold the second transaction");
+        assertSame(withdrawalForAcc001, management.transactions.get(1), "Second slot should hold the second transaction");
     }
 
     @Test
@@ -61,7 +61,7 @@ class TransactionManagementTest {
             management.addTransaction(depositTx);
         }
         assertEquals(200, management.getTransactionCount(), "Count should be 200 after filling capacity");
-        assertNotNull(management.transactions[199], "Last slot should be populated");
+        assertNotNull(management.transactions.get(199), "Last slot should be populated");
     }
 
     @Test
@@ -164,9 +164,9 @@ class TransactionManagementTest {
 
         management.addTransaction(depositTxForAcc777);
 
-        assertSame(depositTxForAcc777, management.transactions[0],
+        assertSame(depositTxForAcc777, management.transactions.get(0),
                 "Stored instance should be the same object that was added");
-        assertEquals("ACC777", management.transactions[0].toString(),
+        assertEquals("ACC777", management.transactions.get(0).toString(),
                 "toString() should return the account number");
     }
 }

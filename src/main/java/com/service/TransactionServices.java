@@ -89,7 +89,7 @@ public class TransactionServices {
         double totalWithdrawals = 0;
         System.out.printf("Account: %s - %s\nAccount Type: %s\nCurrent Balance: %.2f\n\n",
                 account.getAccountNumber(), account.getCustomer(), account.getAccountType(), account.getBalance());
-        System.out.println("TRANSACTION HISTORY");
+        System.out.println("ACCOUNT STATEMENT");
         System.out.println("=====================================================================");
         System.out.println("TXN ID | DATE/TIME          | TYPE    | AMOUNT    | BALANCE");
 
