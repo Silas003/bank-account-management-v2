@@ -3,8 +3,12 @@ package com.service;
 import com.models.*;
 import com.models.exceptions.*;
 import com.utilities.ValidationUtils;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -78,31 +82,56 @@ public class AccountService {
 
 
 
-    public void viewAllAccounts() {
+    public void viewAllAccounts() throws IOException {
         
-        if(accountManagement.getAccountCount() <= 0){
-            System.out.println("No Account In System.Returning to Main menu");
-            ValidationUtils.promptEnterKey(scanner);
-            return;
-        }
+//        if(accountManagement.getAccountCount() <= 0){
+//            System.out.println("No Account In System.Returning to Main menu");
+//            ValidationUtils.promptEnterKey(scanner);
+//            return;
+//        }
 
         System.out.println("ACCOUNT LISTING");
         System.out.println("====================================================");
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
-        Account[] allAccounts = accountManagement.viewAllAccounts();
+//       Account[] allAccounts = accountManagement.viewAllAccounts();
+////
+//
+//        for (int i = 0; i < accountManagement.getAccountCount(); i++) {
+//
+//            Account account = allAccounts[i];
+//            System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
+//                    account.getAccountNumber(),
+//                    account.getCustomer(),
+//                    account.getAccountType(),
+//                    account.getBalance(),
+//                    account.getStatus(),
+//                    account.getAccountSpecificDetails());
+//        }
+        ArrayList<List> rd= FilePersistenceService.readFromFile("account");
+//        for (int i =0;i<rd.size();i++){
+//            for(int j =0; j < rd.get(0).size();j++){
+//                System.out.printf("%s \n",
+//                        rd.get(i).get(j));
+//                        rd.get(i).get(j),
+//                        rd.get(i).get(j),
+//                        rd.get(i).get(j),
+//                        rd.get(i).get(j),
+//                        rd.get(i).get(j));
+//            }
+//        }
+//        }
 
-        for (int i = 0; i < accountManagement.getAccountCount(); i++) {
-
-            Account account = allAccounts[i];
-            System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
-                    account.getAccountNumber(),
-                    account.getCustomer(),
-                    account.getAccountType(),
-                    account.getBalance(),
-                    account.getStatus(),
-                    account.getAccountSpecificDetails());
+        if (rd == null || rd.isEmpty()) {
+            System.out.println("No records found.");
+        } else {
+            for (List<String> row : rd) {
+                for (String cell : row) {
+                    System.out.println(cell);
+                }
+                System.out.println("---");
+            }
         }
 
         System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",

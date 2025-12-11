@@ -1,6 +1,8 @@
 package com.handlers;
 import com.CustomRunner;
 import com.service.*;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -25,7 +27,7 @@ public class AppHandler {
         submenuHandler = new SubmenuHandler(scanner, accountService, transactionService, customerService);
     }
 
-    public void start() {
+    public void start() throws IOException {
         boolean running = true;
         System.out.println("||====================================||");
         System.out.println("  BANK ACCOUNT MANAGEMENT - MAIN MENU");
