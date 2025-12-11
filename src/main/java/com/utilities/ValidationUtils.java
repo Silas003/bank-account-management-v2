@@ -195,12 +195,24 @@ public class ValidationUtils {
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter Account Number: ");
             accountNumber = scanner.nextLine();
-            if (accountNumber.isBlank() || !accountNumber.matches("(?i)^ACC00\\d{1,}$")) {
+            if (accountNumber.isBlank() || !accountNumber.matches("(?i)^ACC\\d{3,}$")) {
                 System.out.println("Invalid Account Number provided. Example: ACC004");
             } else return accountNumber;
         }
         throw new InvalidAccountException("Too many Account Numbers provided. Returning to main menu.");
 
+    }
+
+    public static String validaeCustomerEmail(Scanner scanner){
+        String customerEmail;
+        for (int i = 0; i < maxRetries; i++) {
+            System.out.print("Enter customer email: ");
+            customerEmail = scanner.nextLine();
+            if (customerEmail.isBlank() || !customerEmail.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                System.out.println("Invalid Customer email. eg: name@example.com");
+            } else return customerEmail;
+        }
+        throw new CustomerNameException("Too many invalid customer email attempts. Returning to main menu.");
     }
 
     /*

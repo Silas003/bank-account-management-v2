@@ -29,7 +29,7 @@ public class AccountService {
 
     public void createAccount() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String customerName, customerAddress, customerContact;
+        String customerName, customerAddress, customerContact,customerEmail;
         int customerAge;
 
         System.out.println("ACCOUNT CREATION");
@@ -39,6 +39,7 @@ public class AccountService {
             customerName = ValidationUtils.validateCustomerNameInput(scanner);
             customerAge = ValidationUtils.validateCustomerAgeInput(scanner);
             customerContact = ValidationUtils.validateCustomerContactInput(scanner);
+            customerEmail = ValidationUtils.validaeCustomerEmail(scanner);
             customerAddress = ValidationUtils.validateCustomerAddressInput(scanner);
             String customerTypeInput = ValidationUtils.validateCustomerTypeInput(scanner);
             String accounTypeInput = ValidationUtils.validateAccountTypeInput(scanner);
@@ -46,8 +47,8 @@ public class AccountService {
 
 
             Customer customer;
-            customer = customerTypeInput.equals("1") ? new RegularCustomer(customerName, customerAge, customerContact, customerAddress, "Regular") :
-                    new PremiumCustomer(customerName, customerAge, customerContact, customerAddress,"Premium");
+            customer = customerTypeInput.equals("1") ? new RegularCustomer(customerName, customerAge, customerContact, customerAddress, "Regular",customerEmail) :
+                    new PremiumCustomer(customerName, customerAge, customerContact, customerAddress,"Premium",customerEmail);
 
             Account newAccount;
             newAccount = accounTypeInput.equals("1") ? new SavingsAccount(customer, initialDepositAmount) : new CheckingAccount(customer, initialDepositAmount);

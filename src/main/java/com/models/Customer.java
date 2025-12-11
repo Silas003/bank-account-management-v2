@@ -5,6 +5,7 @@ public abstract class Customer {
     private String customerId;
     private String name;
     private int age;
+    private String email;
     private String contact;
     private String type;
     private String address;
@@ -21,13 +22,14 @@ public abstract class Customer {
     }
 
 
-    Customer(String name, int age, String contact, String address,String type) {
+    Customer(String name, int age, String contact, String address,String type,String email) {
         this();
         setName(name);
         setAge(age);
         setContact(contact);
         setAddress(address);
         setType(type);
+        setEmail(email);
     }
 
 
@@ -79,6 +81,13 @@ public abstract class Customer {
         this.type = type;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public abstract String displayCustomerDetails();
 

@@ -2,8 +2,8 @@ package com.models;
 
 public class RegularCustomer extends Customer {
 
-    public RegularCustomer(String name, int age, String contact, String address,String type) {
-        super(name, age, contact, address, type);
+    public RegularCustomer(String name, int age, String contact, String address,String type,String email) {
+        super(name, age, contact, address, type,email);
     }
 
     public String displayCustomerDetails() {
