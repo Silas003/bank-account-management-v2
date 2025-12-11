@@ -5,6 +5,7 @@ import com.models.exceptions.*;
 import com.utilities.ValidationUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -90,11 +91,11 @@ public class AccountService {
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
-        Account[] allAccounts = accountManagement.viewAllAccounts();
+        ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
 
         for (int i = 0; i < accountManagement.getAccountCount(); i++) {
 
-            Account account = allAccounts[i];
+            Account account = allAccounts.get(i);
             System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
                     account.getAccountNumber(),
                     account.getCustomer(),
