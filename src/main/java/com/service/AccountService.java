@@ -62,6 +62,7 @@ public class AccountService {
                         dateTime));
 
             System.out.println("Account created successfully!");
+            FilePersistenceService.writeToAccountFile("account",newAccount);
             System.out.println(newAccount.displayAccountDetails());
 
             ValidationUtils.promptEnterKey(scanner);

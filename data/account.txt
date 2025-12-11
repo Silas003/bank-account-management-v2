@@ -1,0 +1,1 @@
+ACC001,sd ,Savings,$5756.00,active,Interest Rate: 3.5% Min Balance:$ 500.00ACC001,s ,Savings,$56858.00,active,Interest Rate: 3.5% Min Balance:$ 500.00ACC001,s ,Savings,$757.00,active,Interest Rate: 3.5% Min Balance:$ 500.00
