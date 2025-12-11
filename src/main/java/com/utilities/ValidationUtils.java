@@ -195,7 +195,7 @@ public class ValidationUtils {
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter Account Number: ");
             accountNumber = scanner.nextLine();
-            if (accountNumber.isBlank() || !accountNumber.matches("(?i)^ACC00\\d{1,}$")) {
+            if (accountNumber.isBlank() || !accountNumber.matches("(?i)^ACC\\d{3}$")) {
                 System.out.println("Invalid Account Number provided. Example: ACC004");
             } else return accountNumber;
         }
