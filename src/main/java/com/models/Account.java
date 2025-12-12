@@ -67,12 +67,15 @@ public abstract class Account implements Transactable {
 
     public abstract void withdraw (double amount)throws IllegalAmountException, InsufficientFundsExceptions;
 
-
-    @Override
-    public String toString() {
-        return String.format("Customer: %s\nAccount Type:%s\nCurrent Balance: %.2f",
-                getCustomer(), getAccountType(), getBalance());
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
+
+//    @Override
+//    public String toString() {
+//        return String.format("Customer: %s\nAccount Type:%s\nCurrent Balance: %.2f",
+//                getCustomer(), getAccountType(), getBalance());
+//    }
 
 
     public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {

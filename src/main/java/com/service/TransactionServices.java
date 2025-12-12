@@ -4,6 +4,7 @@ import com.models.Account;
 import com.models.Transaction;
 import com.utilities.ValidationUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,13 +44,16 @@ public class TransactionServices {
             printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
             ValidationUtils.validateTransactionConfirmation(scanner);
             boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
+            Transaction transaction;
             if (success) {
-                transactionManagement.addTransaction(new Transaction(userAccount.getAccountNumber(),
+                transaction = new Transaction(userAccount.getAccountNumber(),
                         transactionType.get(transactionTypeInput),
                         amount,
                         userAccount.getBalance(),
-                        dateTime));
+                        dateTime);
+                transactionManagement.addTransaction(transaction);
                 System.out.println("Transaction successful!");
+                FilePersistenceService.writeToTransactionFile("transaction",transaction);
             } else {
                 System.out.println("Transaction failed! Check balance or account rules.");
             }
@@ -59,6 +63,8 @@ public class TransactionServices {
             ValidationUtils.promptEnterKey(scanner);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

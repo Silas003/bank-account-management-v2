@@ -1,5 +1,9 @@
-ACC001,sqs ,Savings,$6435.00,active,Interest Rate: 3.5% Min Balance:$ 500.00
-ACC002,rewe rewr ,Savings,$436354.00,active,Interest Rate: 3.5% Min Balance:$ 500.00
-ACC001,ad ,Savings,$5234.00,active,Interest Rate: 3.5% Min Balance:$ 500.00
-ACC001,d ,Savings,$3435.00,active,Interest Rate: 3.5% Min Balance:$ 500.00
-ACC001,kogu sam ,Checking,$436543643.00,active,Overdraft Limit: $1000.00 MonthlyFee: $10.00
+ACC001,CUS001 ,Savings,600.00,active
+ACC002,CUS001 ,Savings,600.00,active
+ACC003,CUS001 ,Savings,600.00,active
+ACC004,CUS001 ,Savings,533.00,active
+ACC005,CUS001 ,Savings,7657.00,active
+ACC006,CUS001 ,Savings,4222.00,active
+ACC0013,CUS004,Checking,767677.00,active
+ACC0014,CUS005 ,Savings,4424.00,active
+

@@ -5,8 +5,7 @@ public class SavingsAccount extends Account {
     private final double interestRate;
     private final double minimumBalance;
 
-    SavingsAccount() {
-        super();
+     SavingsAccount() {
         this.interestRate = 0.035;
         this.minimumBalance = 500;
     }
@@ -17,6 +16,17 @@ public class SavingsAccount extends Account {
         setCustomer(customer);
         setBalance(balance);
         setStatus("active");
+    }
+
+    public SavingsAccount(String accountNumber,Customer customer, double balance) {
+        this();
+        setAccountNumberFromFile(accountNumber);
+        setCustomer(customer);
+        setBalance(balance);
+        setStatus("active");
+    }
+    public void setAccountNumberFromFile(String accountNumber) {
+        setAccountNumber(accountNumber);
     }
 
     @Override
