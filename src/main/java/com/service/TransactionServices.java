@@ -44,7 +44,7 @@ public class TransactionServices {
             String dateTime = LocalDateTime.now().format(formatter);
             printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
             ValidationUtils.validateTransactionConfirmation(scanner);
-            boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
+            boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput),null);
             Transaction transaction;
             if (success) {
                 transaction = new Transaction(userAccount.getAccountNumber(),
@@ -71,10 +71,42 @@ public class TransactionServices {
     }
 
     public void transferToOtherAccounts() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         System.out.println("TRANSFER TO OTHER ACCOUNTS");
         System.out.println("==========================");
-        System.out.println("This feature is coming soon!");
-        System.out.println("You will be able to transfer funds between accounts here.");
+        try {
+        System.out.println("Enter sender account number");
+        String sender = ValidationUtils.validateAccountNumberInput(scanner);
+        System.out.println("Enter receiver account number");
+        String receiver = ValidationUtils.validateAccountNumberInput(scanner);
+        double amount = ValidationUtils.validateTransactionAmount(scanner);
+        Account senderAccount = AccountManagement.findAccount(sender);
+        Account receiverAccount = AccountManagement.findAccount(receiver);
+        boolean success = senderAccount.processTransactions(amount,"transfer",receiverAccount);
+        Transaction transaction;
+        String dateTime = LocalDateTime.now().format(formatter);
+        if (success) {
+            transaction = new Transaction(senderAccount.getAccountNumber(),
+                    "transfer",
+                    amount,
+                    senderAccount.getBalance(),
+                    dateTime);
+            transactionManagement.addTransaction(transaction);
+            System.out.println("Transaction successful!");
+
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
+            FilePersistenceService.reWriteAllToFile();
+            }
+         else {
+            System.out.println("Transaction failed! Check balance or account rules.");
+        }
+        } catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+                 | OverdraftLimitException | IllegalAmountException ce){
+            System.out.println(ce.getMessage());
+            ValidationUtils.promptEnterKey(scanner);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ValidationUtils.promptEnterKey(scanner);
     }
 

@@ -102,13 +102,12 @@ public class AccountService {
         for (int i = 0; i < accountManagement.getAccountCount(); i++) {
 
             Account account = allAccounts.get(i);
-            System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
+            System.out.printf("%s | %s | %s | $%.2f | %s\n",
                     account.getAccountNumber(),
                     account.getCustomer(),
                     account.getAccountType(),
                     account.getBalance(),
-                    account.getStatus(),
-                    account.getAccountSpecificDetails());
+                    account.getStatus());
         }
 
         ValidationUtils.promptEnterKey(scanner);
