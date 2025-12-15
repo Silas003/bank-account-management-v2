@@ -74,6 +74,7 @@ public class TransactionServices {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         System.out.println("TRANSFER TO OTHER ACCOUNTS");
         System.out.println("==========================");
+        try {
         System.out.println("Enter sender account number");
         String sender = ValidationUtils.validateAccountNumberInput(scanner);
         System.out.println("Enter receiver account number");
@@ -92,16 +93,19 @@ public class TransactionServices {
                     dateTime);
             transactionManagement.addTransaction(transaction);
             System.out.println("Transaction successful!");
-            try {
-                FilePersistenceService.writeToTransactionFile("transaction",transaction);
-                FilePersistenceService.reWriteAllToFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
+            FilePersistenceService.reWriteAllToFile();
             }
          else {
             System.out.println("Transaction failed! Check balance or account rules.");
+        }
+        } catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+                 | OverdraftLimitException | IllegalAmountException ce){
+            System.out.println(ce.getMessage());
+            ValidationUtils.promptEnterKey(scanner);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
         ValidationUtils.promptEnterKey(scanner);
     }
