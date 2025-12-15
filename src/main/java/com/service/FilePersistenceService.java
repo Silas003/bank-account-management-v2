@@ -71,7 +71,7 @@ public class FilePersistenceService {
     }
 
     private static String convertCustonerToString(Customer customer){
-        return String.format("%s,%s,%s,%s,%s,%s\n",
+        return String.format("%s,%s,%s,%s,%s,%s",
                 customer.getCustomerId(),
                 customer.getName(),
                 customer.getAge(),
@@ -82,7 +82,7 @@ public class FilePersistenceService {
     }
 
     private static String convertTransactionToString(Transaction transaction){
-        return String.format("%s,%s,%s,%.2f,%.2f,%s\n",
+        return String.format("%s,%s,%s,%.2f,%.2f,%s",
                 transaction.getTransactionId(),
                 transaction.getAccountNumber(),
                 transaction.getTransactionType(),
