@@ -30,10 +30,7 @@ public class CustomerService {
         System.out.println("======================================================");
         System.out.println("CUSTOMER ID | NAME    | TYPE  | CONTACT    | ADDRESS");
 
-        for (Customer customer : customers) {
-            System.out.printf("%s",customer.displayCustomerDetails());
-        }
-        customers.stream().forEach(Customer::displayCustomerDetails);
+        customers.stream().map(Customer::displayCustomerDetails).forEach(System.out::print);
 
         System.out.println("========================================================\n");
         System.out.println("Total Customers: " + customerManagement.getCustomerSize());
