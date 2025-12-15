@@ -3,9 +3,12 @@ package com.service;
 import com.models.*;
 import com.models.exceptions.*;
 import com.utilities.ValidationUtils;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -54,17 +57,20 @@ public class AccountService {
             newAccount = accounTypeInput.equals("1") ? new SavingsAccount(customer, initialDepositAmount) : new CheckingAccount(customer, initialDepositAmount);
 
             customerManagement.addCustomer(customer);
+            FilePersistenceService.writeToCustomerFile("customer",customer);
             accountManagement.addAccount(newAccount);
             String dateTime = LocalDateTime.now().format(formatter);
-            transactionManagement.addTransaction(new Transaction(newAccount.getAccountNumber(),
-                        "Deposit",
-                        initialDepositAmount,
-                        initialDepositAmount,
-                        dateTime));
+            Transaction transaction = new Transaction(newAccount.getAccountNumber(),
+                    "Deposit",
+                    initialDepositAmount,
+                    initialDepositAmount,
+                    dateTime);
+            transactionManagement.addTransaction(transaction);
 
             System.out.println("Account created successfully!");
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
+            FilePersistenceService.writeToAccountFile("account",newAccount);
             System.out.println(newAccount.displayAccountDetails());
-
             ValidationUtils.promptEnterKey(scanner);
 
         } catch (CustomerNameException | CustomerAddressException | CustomerAgeException |
@@ -78,8 +84,8 @@ public class AccountService {
 
 
 
-    public void viewAllAccounts() {
-        
+    public void viewAllAccounts() throws IOException {
+
         if(accountManagement.getAccountCount() <= 0){
             System.out.println("No Account In System.Returning to Main menu");
             ValidationUtils.promptEnterKey(scanner);
@@ -104,9 +110,6 @@ public class AccountService {
                     account.getStatus(),
                     account.getAccountSpecificDetails());
         }
-
-        System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",
-                accountManagement.getAccountCount(), accountManagement.getTotalBalance());
 
         ValidationUtils.promptEnterKey(scanner);
 

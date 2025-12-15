@@ -18,6 +18,16 @@ public class CheckingAccount extends Account {
         setBalance(balance);
         setStatus("active");
     }
+    public CheckingAccount(String accountNumber,Customer customer, double balance) {
+        this();
+        setAccountNumberFromFile(accountNumber);
+        setCustomer(customer);
+        setBalance(balance);
+        setStatus("active");
+    }
+    public void setAccountNumberFromFile(String accountNumber) {
+        setAccountNumber(accountNumber);
+    }
 
     @Override
     public String getAccountSpecificDetails() {

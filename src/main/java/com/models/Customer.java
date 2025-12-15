@@ -8,7 +8,7 @@ public abstract class Customer {
     private String contact;
     private String type;
     private String address;
-    static int customerCounter;
+    public static int customerCounter;
 
 
     Customer() {
@@ -17,12 +17,20 @@ public abstract class Customer {
 
     @Override
     public String toString() {
-        return String.format("%s ", this.getName());
+        return String.format("%s ", this.getCustomerId());
     }
 
 
     Customer(String name, int age, String contact, String address,String type) {
         this();
+        setName(name);
+        setAge(age);
+        setContact(contact);
+        setAddress(address);
+        setType(type);
+    }
+    Customer(String CustomerId,String name, int age, String contact, String address,String type) {
+        setCustomerIdFromFile(CustomerId);
         setName(name);
         setAge(age);
         setContact(contact);
@@ -39,7 +47,9 @@ public abstract class Customer {
     public void setCustomerId() {
         this.customerId = "CUS00" + ++customerCounter;
     }
-
+    public void setCustomerIdFromFile(String customerId) {
+        this.customerId = customerId;
+    }
     public String getName() {
         return this.name;
     }

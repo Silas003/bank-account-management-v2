@@ -1,7 +1,7 @@
 package com.service;
 import com.models.*;
 import com.models.exceptions.*;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -14,7 +14,6 @@ public class AccountManagement {
 
     private static HashMap<String,Account> accounts = new HashMap<>();
     public static int accountCount;
-
 
     public static void addAccount(Account account) {
             accounts.put(account.getAccountNumber(), account);
@@ -45,5 +44,9 @@ public class AccountManagement {
 
     public static int getAccountCount() {
         return accounts.size();
+    }
+
+    public static void returnVoid(){
+        System.out.println(accounts);
     }
 }

@@ -2,6 +2,7 @@
 package com.utilities;
 import com.models.exceptions.*;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 /*
@@ -55,7 +56,7 @@ public class ValidationUtils {
      * Validates customer type selection.
      * Options: 1 for Regular, 2 for Premium.
      */
-    public static String validateCustomerTypeInput(Scanner scanner) throws TypeSelectionException{
+    public static String validateCustomerTypeInput(Scanner scanner) throws TypeSelectionException {
         System.out.println("1. Regular Customer (Standard banking services)\n2. Premium Customer (Enhanced benefits, min balance $10,000)");
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Select type (1-2): ");
@@ -70,7 +71,7 @@ public class ValidationUtils {
      * Validates account type selection.
      * Options: 1 for Savings, 2 for Checking.
      */
-    public static String validateAccountTypeInput(Scanner scanner) throws TypeSelectionException{
+    public static String validateAccountTypeInput(Scanner scanner) throws TypeSelectionException {
         System.out.println("1. Savings Account (Interest: 3.5%, Minimum Balnance: $500)\n2. Checking Account (Overdraft: $1,000 ,Monthly Fee: $10)");
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Select type (1-2): ");
@@ -85,7 +86,7 @@ public class ValidationUtils {
      * Validates transaction type selection.
      * Options: 1 for Deposit, 2 for Withdrawal.
      */
-    public static String validateTransactionTypeInput(Scanner scanner) throws TypeSelectionException{
+    public static String validateTransactionTypeInput(Scanner scanner) throws TypeSelectionException {
         System.out.println("1. Deposit\n2. Withdrawal");
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Select type (1-2): ");
@@ -127,7 +128,7 @@ public class ValidationUtils {
      * Validates transaction amount.
      * Amount must be positive.
      */
-    public static double validateTransactionAmount(Scanner scanner) throws IllegalAmountException{
+    public static double validateTransactionAmount(Scanner scanner) throws IllegalAmountException {
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter amount: ");
             try {
@@ -148,7 +149,7 @@ public class ValidationUtils {
      * Validates customer contact input.
      * Must be 10 digits and contain only numbers.
      */
-    public static String validateCustomerContactInput(Scanner scanner) throws CustomerContactException{
+    public static String validateCustomerContactInput(Scanner scanner) throws CustomerContactException {
         for (int i = 0; i < maxRetries; i++) {
             System.out.print("Enter customer contact: ");
             String contact = scanner.nextLine();
@@ -175,7 +176,7 @@ public class ValidationUtils {
     /*
      * Confirms transaction with user (Y/N).
      */
-    public static String validateTransactionConfirmation(Scanner scanner) throws TypeSelectionException{
+    public static String validateTransactionConfirmation(Scanner scanner) throws TypeSelectionException {
         for (int i = 0; i < 2; i++) {
             System.out.print("Confirm transaction? (Y/N): ");
             String input = scanner.nextLine();
@@ -209,5 +210,22 @@ public class ValidationUtils {
     public static void promptEnterKey(Scanner scanner) {
         System.out.print("Press Enter to continue...");
         scanner.nextLine();
+    }
+
+
+    public static Double parseMoney(String s) {
+        if (s == null) return null;
+        String cleaned = s.trim()
+                .replaceAll("[₵$€£GHSghs ]", "")
+                .replace(",", "");
+
+        if (cleaned.isEmpty()) return null;
+
+        try {
+            return new Double(cleaned);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
     }
 }

@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
  */
 public class TransactionManagement {
 
-    public ArrayList<Transaction> transactions = new ArrayList<>();
+    public static ArrayList<Transaction> transactions = new ArrayList<>();
     public int transactionCount;
 
-    public void addTransaction(Transaction transaction) {
+    public static void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
 

@@ -1,0 +1,2 @@
+ACC003,CUS0011 ,Savings,500.00,active
+ACC001,CUS007 ,Savings,601.00,active
