@@ -113,8 +113,6 @@ public class TransactionServices {
         System.out.println("Total Deposits: " + totalDeposits);
         System.out.println("Total Withdrawals: " + totalWithdrawals);
         System.out.println("Net Change: " + (totalDeposits - totalWithdrawals));
-
-
         ValidationUtils.promptEnterKey(scanner);
     }
 

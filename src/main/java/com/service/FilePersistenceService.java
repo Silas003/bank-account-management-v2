@@ -66,7 +66,6 @@ public class FilePersistenceService {
                 account.getAccountType(),
                 account.getBalance(),
                 account.getStatus()
-//                account.getAccountSpecificDetails()
         );
     }
 

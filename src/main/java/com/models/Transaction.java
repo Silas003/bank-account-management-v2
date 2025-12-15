@@ -2,7 +2,7 @@ package com.models;
 
 public class Transaction {
 
-    static int transactionCounter;
+    public static int transactionCounter;
     private String transactionId;
     private String type;
     private String accountNumber;
@@ -74,7 +74,9 @@ public class Transaction {
         this.type = type;
     }
 
-
+    private void setTransactionIdFromFIle(String transaction){
+        transactionId = transaction;
+    }
     Transaction() {
         generateUniqueId();
     }
@@ -86,6 +88,15 @@ public class Transaction {
 
     public Transaction(String accountNumber, String type, double amount, double balanceAfter, String dateTime) {
         this();
+        setAccountNumber(accountNumber);
+        setAmount(amount);
+        setType(type);
+        setBalanceAfter(balanceAfter);
+        setTimeStamp(dateTime);
+    }
+
+    public Transaction(String transactionId,String accountNumber, String type, double amount, double balanceAfter, String dateTime) {
+        setTransactionIdFromFIle(transactionId);
         setAccountNumber(accountNumber);
         setAmount(amount);
         setType(type);
