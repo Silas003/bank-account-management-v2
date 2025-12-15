@@ -1,16 +1,14 @@
 package com.utilities;
-
 import com.models.Account;
 import com.models.exceptions.InvalidAccountException;
 import com.service.AccountManagement;
-
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 public class ConcurrencyUtils implements Runnable{
     private Account account;
     private String transactionType;
+
     public ConcurrencyUtils(Account account,String transactionType){
         this.account = account;
         this.transactionType = transactionType;
@@ -21,6 +19,11 @@ public class ConcurrencyUtils implements Runnable{
                 String.format("%s %sing %.2f to %s\n",Thread.currentThread().getName(),transactionType,amount,account.getAccountNumber()):
                 String.format("%s %sing %.2f from %s\n",Thread.currentThread().getName(),transactionType,amount,account.getAccountNumber());
         System.out.printf(message);
+        try {
+            Thread.sleep(450);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         account.processTransactions(amount,transactionType);
     }
 
@@ -38,12 +41,14 @@ public class ConcurrencyUtils implements Runnable{
         t4.start();
         t5.start();
 
-
             t1.join();
             t2.join();
             t3.join();
             t4.join();
             t5.join();
+            System.out.println("Thread-safe opeartions completed successfully.");
+            System.out.printf("Final Balance for ACC001: $%.2f",account.getBalance());
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

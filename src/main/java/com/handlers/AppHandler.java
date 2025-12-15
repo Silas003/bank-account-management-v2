@@ -67,7 +67,8 @@ public class AppHandler {
                     yield true;
                 }
                 case "6" -> {
-                    System.out.println("Thank you for using Bank Account Management System!\nGoodbye!");
+                    System.out.println("Thank you for using Bank Account Management System!" +
+                            "\nData automatically saved to disk.\nGoodbye!");
                     yield false;
                 }
                 default -> { 
