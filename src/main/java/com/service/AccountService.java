@@ -98,8 +98,6 @@ public class AccountService {
         System.out.println("====================================================");
 
        ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
-//
-        System.out.println(allAccounts.size());
         for (int i = 0; i < accountManagement.getAccountCount(); i++) {
 
             Account account = allAccounts.get(i);

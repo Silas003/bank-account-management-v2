@@ -1,7 +1,6 @@
 package com.service;
-import com.models.Account;
-import com.models.Customer;
-import com.models.Transaction;
+import com.models.*;
+import com.utilities.ValidationUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,9 +10,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class FilePersistenceService {
+    static Customer customer;
+    static Account account;
+    static Transaction transaction;
     private static Path getOrCreateFile(String fileType) throws IOException {
         Path path = Paths.get("data/" + fileType + ".txt");
         if (Files.notExists(path))
@@ -109,9 +110,73 @@ public class FilePersistenceService {
                             account.getAccountNumber(), writeError.getMessage());
                 }
             }
+            System.out.println("Accounts saved to accounts.txt");
         } catch (IOException e) {
             throw new java.io.UncheckedIOException("Failed to open account file", e);
         }
     }
 
+    public static void loadAllDataFromFile() throws IOException {
+        Double balance;
+        Double amount;
+        Double balanceAfter;
+        System.out.println("Loading customer data from files...");
+        ArrayList<List> customers = readFromFile("customer");
+        for (List<String> row : customers) {
+            if(row.size()>=5) {
+                if(row.get(5).equalsIgnoreCase("Regular")){
+                    customer = new RegularCustomer(
+                            row.get(0),
+                            row.get(1),
+                            Integer.parseInt(row.get(2)),
+                            row.get(3),
+                            row.get(4),
+                            row.get(5));
+
+                }else {
+                    customer = new PremiumCustomer(
+                            row.get(0),
+                            row.get(1),
+                            Integer.parseInt(row.get(2)),
+                            row.get(3),
+                            row.get(4),
+                            row.get(5)
+                    );
+                }
+                CustomerManagement.addCustomer(customer);
+            }
+        }
+        Customer.customerCounter = customers.size();
+        System.out.println("Loading account data from files...");
+        ArrayList<List> accounts = readFromFile("account");
+        Account.accountCounter = accounts.size();
+        for (List<String> row : accounts) {
+            if(row.size() >=3) {
+                Customer customer1 = CustomerManagement.findCustomerById(row.get(1).trim());
+                balance = ValidationUtils.parseMoney(row.get(3));
+                if(row.get(2).equalsIgnoreCase("Savings")){
+                    account = new SavingsAccount(row.get(0).trim(),customer1,balance);
+                }else {
+                    account = new CheckingAccount(row.get(0).trim(),customer1,balance);
+                }
+            }
+
+            AccountManagement.addAccount(account);
+        }
+        System.out.println("Loading transaction data from files...");
+        ArrayList<List> transactions = readFromFile("transaction");
+        Transaction.transactionCounter = transactions.size();
+        for (List<String> row : transactions) {
+            if(row.size() >=3) {
+                amount = ValidationUtils.parseMoney(row.get(3));
+                balanceAfter = ValidationUtils.parseMoney(row.get(4));
+                transaction = new Transaction(row.get(0), row.get(1).trim(), row.get(2), amount,balanceAfter,row.get(5));
+            }
+
+            TransactionManagement.addTransaction(transaction);
+        }
+        System.out.printf("%d customers loaded from customer.txt\n",customers.size());
+        System.out.printf("%d accounts loaded from account.txt\n",accounts.size());
+        System.out.printf("%d transactions loaded from transaction.txt\n",transactions.size());
+    }
 }

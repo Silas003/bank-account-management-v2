@@ -28,6 +28,7 @@ public class AppHandler {
     }
 
     public void start() throws IOException {
+        FilePersistenceService.loadAllDataFromFile();
         boolean running = true;
         System.out.println("||====================================||");
         System.out.println("  BANK ACCOUNT MANAGEMENT - MAIN MENU");
@@ -38,7 +39,8 @@ public class AppHandler {
             System.out.println("2. Perform Transaction");
             System.out.println("3. Generate Account Statements");
             System.out.println("4. Run Tests");
-            System.out.println("5. Exit");
+            System.out.println("5. Load Data");
+            System.out.println("6. Exit");
 
             System.out.print("Enter choice: ");
             String choice = scanner.nextLine();
@@ -62,6 +64,10 @@ public class AppHandler {
                     yield true;
                 }
                 case "5" -> {
+                    FilePersistenceService.loadAllDataFromFile();
+                    yield true;
+                }
+                case "6" -> {
                     System.out.println("Thank you for using Bank Account Management System!\nGoodbye!");
                     yield false;
                 }
