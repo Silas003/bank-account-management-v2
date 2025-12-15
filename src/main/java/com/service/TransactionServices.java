@@ -83,11 +83,22 @@ public class TransactionServices {
         System.out.println("========================");
         try{
             String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
-            Account account = accountManagement.findAccount(accountNumber.toUpperCase());
-            ArrayList<Transaction> transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+            String sortType = ValidationUtils.validateTransactionSortTypeInput(scanner);
+            Account account = accountManagement.findAccount(accountNumber.toUpperCase());;
+            ArrayList<Transaction> transactions;
+            if (sortType.equalsIgnoreCase("1")){
+                transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+            } else if (sortType.equalsIgnoreCase("2")) {
+                transactions = transactionManagement.viewAllTransactionsByAmount(account.getAccountNumber());
+            }else {
+                transactions = transactionManagement.viewAllTransactionsByDateTime(account.getAccountNumber());
+            }
+
             printTransactionHistory(account,transactions);
         }catch (InvalidAccountException iae){
             System.out.println(iae.getMessage());
+        } catch (TypeSelectionException e) {
+            throw new RuntimeException(e);
         }
         ValidationUtils.promptEnterKey(scanner);
     }

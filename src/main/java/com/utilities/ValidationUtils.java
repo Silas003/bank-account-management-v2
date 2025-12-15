@@ -228,4 +228,16 @@ public class ValidationUtils {
         }
 
     }
+
+    public static String validateTransactionSortTypeInput(Scanner scanner) throws TypeSelectionException {
+        System.out.println("How would you like the data to be sorted");
+        System.out.println("1. Default\n2. Amount\n3. Date/Time");
+        for (int i = 0; i < maxRetries; i++) {
+            System.out.print("Select type (1-3): ");
+            String input = scanner.nextLine();
+            if (input.equals("1") || input.equals("2") || input.equals("3"))  return input;
+            System.out.println("Invalid selection. Choose 1 , 2 or 3.");
+        }
+        throw new TypeSelectionException("Too many Invalid selection attempts. Returning to main menu.");
+    }
 }
