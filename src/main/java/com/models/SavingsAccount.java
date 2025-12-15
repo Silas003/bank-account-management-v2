@@ -59,7 +59,7 @@ public class SavingsAccount extends Account {
     public synchronized void withdraw(double amount) throws InsufficientFundsExceptions{
         double balance = getBalance();
         if (balance - amount < minimumBalance) {
-            throw new InsufficientFundsExceptions("You can't withdraw below minimum Balance of 500.Current Balance:"+getBalance());
+            throw new InsufficientFundsExceptions("You can't withdraw below minimum Balance of $500.Current Balance: $"+getBalance());
 
         } else {
             setBalance(balance - amount);
