@@ -65,7 +65,7 @@ public class TransactionServices {
             ValidationUtils.promptEnterKey(scanner);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

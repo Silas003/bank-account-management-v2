@@ -1,5 +1,6 @@
 package com.service;
 import com.models.*;
+import com.models.exceptions.InvalidAccountException;
 import com.utilities.ValidationUtils;
 
 import java.io.IOException;
@@ -116,7 +117,7 @@ public class FilePersistenceService {
         }
     }
 
-    public static void loadAllDataFromFile() throws IOException {
+    public static void loadAllDataFromFile() throws IOException, InvalidAccountException {
         Double balance;
         Double amount;
         Double balanceAfter;

@@ -63,10 +63,9 @@ public class CheckingAccount extends Account {
     }
 
 
-    public boolean hasOverdraftLimitExceeded(double amount) throws OverdraftLimitException , IllegalAmountException {
+    public boolean hasOverdraftLimitExceeded(double amount) throws OverdraftLimitException  {
         double overdraftLimit = this.getOverdraftLimit();
         double balance = getBalance();
-        if(amount < 0) throw new IllegalAmountException("Amount cannot be less than 0");
         if (balance - amount < -overdraftLimit) {
             throw new OverdraftLimitException("You can't withdraw more than your overdraft limit");
         }
@@ -74,27 +73,33 @@ public class CheckingAccount extends Account {
     }
 
 
-    public synchronized   boolean deposit(double amount) throws IllegalAmountException {
-        if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
+    public synchronized   boolean deposit(double amount)  {
         setBalance(getBalance() + amount);
         return true;
     }
 
-    public synchronized void withdraw(double amount) throws IllegalAmountException, OverdraftLimitException {
+    public synchronized void withdraw(double amount) throws Exception {
         double balance = getBalance();
-        if (amount <= 0) throw new IllegalAmountException("Withdrawal amount cannot be zero");
-        hasOverdraftLimitExceeded(amount);
+        try {
+            hasOverdraftLimitExceeded(amount);
+        } catch (OverdraftLimitException e) {
+            throw new Exception(e);
+        }
         this.setBalance(balance - amount);
     }
 
 
 
-    public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type) throws InsufficientFundsExceptions, OverdraftLimitException {
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {
             hasOverdraftLimitExceeded(amount);
-            withdraw(amount);
+            try {
+                withdraw(amount);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             return true;
         }
         return false;

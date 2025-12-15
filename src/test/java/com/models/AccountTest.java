@@ -156,7 +156,7 @@ class AccountTest {
 
     @Test
     @DisplayName("CheckingAccount withdraw valid amount within overdraft updates balance")
-    void withdrawCheckingValidAmountTest() throws IllegalAmountException, OverdraftLimitException {
+    void withdrawCheckingValidAmountTest() throws Exception {
         checkingAccount.withdraw(500.0);
         assertEquals(1500.0, checkingAccount.getBalance(), 1e-6, "Balance should reflect withdrawal");
     }
@@ -180,7 +180,7 @@ class AccountTest {
 
     @Test
     @DisplayName("CheckingAccount within overdraft limit does not throw and updates balance")
-    void withdrawCheckingWithinOverdraftTest() throws IllegalAmountException, OverdraftLimitException {
+    void withdrawCheckingWithinOverdraftTest() throws Exception {
 
         checkingAccount.withdraw(2800.0);
         assertEquals(-800.0, checkingAccount.getBalance(), 1e-6, "Balance should become negative within overdraft limit");

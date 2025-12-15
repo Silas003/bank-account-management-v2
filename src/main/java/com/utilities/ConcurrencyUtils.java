@@ -24,7 +24,11 @@ public class ConcurrencyUtils implements Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        account.processTransactions(amount,transactionType);
+        try {
+            account.processTransactions(amount,transactionType);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void simulateConcurrentTransactions()  {
