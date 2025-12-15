@@ -71,19 +71,15 @@ public abstract class Account implements Transactable {
         this.accountNumber = accountNumber;
     }
 
-//    @Override
-//    public String toString() {
-//        return String.format("Customer: %s\nAccount Type:%s\nCurrent Balance: %.2f",
-//                getCustomer(), getAccountType(), getBalance());
-//    }
-
-
-    public boolean processTransactions(double amount, String type) throws IllegalAmountException, InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type,Account receiver) throws IllegalAmountException, InsufficientFundsExceptions {
 
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);
         } else if (type.equalsIgnoreCase("Withdrawal")) {
             withdraw(amount);
+        } else if (type.equalsIgnoreCase("transfer")) {
+            withdraw(amount);
+            receiver.deposit(amount);
         }
         return true;
     }
