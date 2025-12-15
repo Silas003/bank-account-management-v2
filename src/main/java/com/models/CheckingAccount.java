@@ -74,13 +74,13 @@ public class CheckingAccount extends Account {
     }
 
 
-    public  boolean deposit(double amount) throws IllegalAmountException {
+    public synchronized   boolean deposit(double amount) throws IllegalAmountException {
         if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
     }
 
-    public void withdraw(double amount) throws IllegalAmountException, OverdraftLimitException {
+    public synchronized void withdraw(double amount) throws IllegalAmountException, OverdraftLimitException {
         double balance = getBalance();
         if (amount <= 0) throw new IllegalAmountException("Withdrawal amount cannot be zero");
         hasOverdraftLimitExceeded(amount);

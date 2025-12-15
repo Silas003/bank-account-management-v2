@@ -49,7 +49,7 @@ public class SavingsAccount extends Account {
     }
 
 
-    public  boolean deposit(double amount) throws IllegalAmountException {
+    public synchronized  boolean deposit(double amount) throws IllegalAmountException {
         if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
         setBalance(getBalance() + amount);
         return true;
@@ -57,11 +57,11 @@ public class SavingsAccount extends Account {
 
 
     @Override
-    public void withdraw(double amount) throws InsufficientFundsExceptions, IllegalAmountException{
+    public synchronized void withdraw(double amount) throws InsufficientFundsExceptions, IllegalAmountException{
         double balance = getBalance();
-        if (amount <= 0) throw new IllegalAmountException("Deposit amount cannot be zero");
-        if (balance != 0 && (balance - amount < 0)) {
-            throw new InsufficientFundsExceptions("You can't withdraw below a balance of 0");
+        if (amount <= 0) throw new IllegalAmountException("Withdrawal amount cannot be zero");
+        if (balance != 0 && (balance - amount < minimumBalance)) {
+            throw new InsufficientFundsExceptions("You can't withdraw below minimum Balance of 500.Current Balance:"+getBalance());
 
         } else {
             setBalance(balance - amount);

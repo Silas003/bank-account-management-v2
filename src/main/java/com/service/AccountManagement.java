@@ -1,7 +1,6 @@
 package com.service;
 import com.models.*;
 import com.models.exceptions.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,16 +15,14 @@ public class AccountManagement {
     private static HashMap<String,Account> accounts = new HashMap<>();
     public static int accountCount;
 
-
-    public static void addAccount(Account account) throws IOException {
-
-        accounts.put(account.getAccountNumber(), account);
+    public static void addAccount(Account account) {
+            accounts.put(account.getAccountNumber(), account);
     }
 
 
     public static Account findAccount(String accountNumber) throws InvalidAccountException {
-        return Optional.ofNullable(accounts.get(accountNumber))
-                .orElseThrow(()-> new InvalidAccountException("Account Number not found.Returning to main menu"));
+        return Optional.ofNullable(accounts.get(accountNumber.toUpperCase()))
+                .orElseThrow(()-> new InvalidAccountException("Account Number: "+accountNumber+" not found.Returning to main menu"));
     }
 
 

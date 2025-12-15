@@ -97,7 +97,8 @@ public class AccountService {
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
-       ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
+        ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
+
         for (int i = 0; i < accountManagement.getAccountCount(); i++) {
 
             Account account = allAccounts.get(i);
@@ -109,26 +110,6 @@ public class AccountService {
                     account.getStatus(),
                     account.getAccountSpecificDetails());
         }
-         ArrayList<List> rd = FilePersistenceService.readFromFile("account");
-//        System.out.println(rd);
-//        if (rd == null || rd.isEmpty()) {
-//            System.out.println("No records found.");
-//        } else {
-//
-//            for (List<String> row : rd) {
-//                String line = String.join("\t|  ",
-//                        row.stream().map(s -> s == null ? "" : s).toList()
-//                );
-//                System.out.println(line);
-//                if(row.size() > 3){
-//                    String money = row.get(3);
-////                    total = total.add(ValidationUtils.parseMoney(money));
-//                }
-//            }
-//        }
-
-//        System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",
-//                rd.size(),);
 
         ValidationUtils.promptEnterKey(scanner);
 
