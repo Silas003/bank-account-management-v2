@@ -1,6 +1,6 @@
 package com.models.exceptions;
 
-public class CustomerContactException extends RuntimeException {
+public class CustomerContactException extends Exception {
     public CustomerContactException(String message) {
         super(message);
     }

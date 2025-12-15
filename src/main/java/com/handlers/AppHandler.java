@@ -1,5 +1,6 @@
 package com.handlers;
 import com.CustomRunner;
+import com.models.exceptions.InvalidAccountException;
 import com.service.*;
 import java.io.IOException;
 import com.utilities.ConcurrencyUtils;
@@ -27,8 +28,14 @@ public class AppHandler {
 
     }
 
-    public void start() throws IOException {
-        FilePersistenceService.loadAllDataFromFile();
+    public void start() {
+        try {
+            FilePersistenceService.loadAllDataFromFile();
+        } catch (InvalidAccountException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         boolean running = true;
         System.out.println("||====================================||");
         System.out.println("  BANK ACCOUNT MANAGEMENT - MAIN MENU");
@@ -65,7 +72,13 @@ public class AppHandler {
                     yield true;
                 }
                 case "5" -> {
-                    FilePersistenceService.loadAllDataFromFile();
+                    try {
+                        FilePersistenceService.loadAllDataFromFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvalidAccountException e) {
+                        throw new RuntimeException(e);
+                    }
                     yield true;
                 }
                 case "6" -> {

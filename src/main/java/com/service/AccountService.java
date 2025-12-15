@@ -84,7 +84,7 @@ public class AccountService {
 
 
 
-    public void viewAllAccounts() throws IOException {
+    public void viewAllAccounts(){
 
         if(accountManagement.getAccountCount() <= 0){
             System.out.println("No Account In System.Returning to Main menu");

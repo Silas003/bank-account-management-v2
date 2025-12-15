@@ -23,7 +23,7 @@ public class SubmenuHandler {
         this.customerService = customerService;
     }
 
-    public void manageAccounts() throws IOException {
+    public void manageAccounts()  {
         boolean backToMain = false;
         System.out.println("\n||=================||");
         System.out.println("  MANAGE ACCOUNTS");

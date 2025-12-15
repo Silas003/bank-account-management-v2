@@ -21,13 +21,19 @@ public class TransactionManagement {
 
     public ArrayList<Transaction> viewTransactionByAccount(String accountNumber) {
         return transactions.stream()
-                .filter(trnx -> trnx.getAccountNumber().equals(accountNumber))
+                .filter(trnx -> trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Transaction> viewAllTransactionsTyType(String type){
-        return transactions.stream().filter(trnx->trnx.getType().equals(type))
+    public ArrayList<Transaction> viewAllTransactionsByAmount(String accountNumber){
+        return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
                 .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Transaction> viewAllTransactionsByDateTime(String accountNumber){
+        return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
+                .sorted(Comparator.comparing(Transaction::getTimeStamp).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

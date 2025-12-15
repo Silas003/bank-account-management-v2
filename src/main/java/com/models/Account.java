@@ -63,9 +63,9 @@ public abstract class Account implements Transactable {
         this.status = status;
     }
 
-    public abstract boolean deposit(double amount) throws IllegalAmountException;
+    public abstract boolean deposit(double amount) ;
 
-    public abstract void withdraw (double amount)throws IllegalAmountException, InsufficientFundsExceptions;
+    public abstract void withdraw (double amount) throws Exception;
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
