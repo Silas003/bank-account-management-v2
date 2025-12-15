@@ -60,13 +60,15 @@ public class AccountService {
             FilePersistenceService.writeToCustomerFile("customer",customer);
             accountManagement.addAccount(newAccount);
             String dateTime = LocalDateTime.now().format(formatter);
-            transactionManagement.addTransaction(new Transaction(newAccount.getAccountNumber(),
-                        "Deposit",
-                        initialDepositAmount,
-                        initialDepositAmount,
-                        dateTime));
+            Transaction transaction = new Transaction(newAccount.getAccountNumber(),
+                    "Deposit",
+                    initialDepositAmount,
+                    initialDepositAmount,
+                    dateTime);
+            transactionManagement.addTransaction(transaction);
 
             System.out.println("Account created successfully!");
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
             FilePersistenceService.writeToAccountFile("account",newAccount);
             System.out.println(newAccount.displayAccountDetails());
             ValidationUtils.promptEnterKey(scanner);

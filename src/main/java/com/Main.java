@@ -66,7 +66,6 @@ public class Main {
         Transaction.transactionCounter = tr.size();
         for (List<String> row : tr) {
             if(row.size() >=3) {
-                Account account1 = AccountManagement.findAccount(row.get(1).trim());
                 amount = ValidationUtils.parseMoney(row.get(3));
                 balanceAfter = ValidationUtils.parseMoney(row.get(4));
                 transaction = new Transaction(row.get(0), row.get(1).trim(), row.get(2), amount,balanceAfter,row.get(5));

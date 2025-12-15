@@ -60,7 +60,7 @@ public class FilePersistenceService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
     private static String convertAccountToString(Account account){
-        return String.format("%s,%s,%s,%.2f,%s\n",
+        return String.format("%s,%s,%s,%.2f,%s",
                 account.getAccountNumber(),
                 account.getCustomer(),
                 account.getAccountType(),
@@ -90,4 +90,28 @@ public class FilePersistenceService {
                 transaction.getTimeStamp()
         );
     }
+
+    public static void reWriteAllToFile() throws IOException {
+        var accounts = AccountManagement.viewAllAccounts();
+        Path path = getOrCreateFile("account");
+
+        try (var writer = Files.newBufferedWriter(
+                path, StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING
+        )) {
+            for (var account : accounts) {
+                try {
+                    writer.write(convertAccountToString(account));
+                    writer.newLine();
+                } catch (IOException writeError) {
+                    System.err.printf("Failed to write account %s: %s%n",
+                            account.getAccountNumber(), writeError.getMessage());
+                }
+            }
+        } catch (IOException e) {
+            throw new java.io.UncheckedIOException("Failed to open account file", e);
+        }
+    }
+
 }

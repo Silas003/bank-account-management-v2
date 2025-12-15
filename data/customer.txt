@@ -1,6 +1,3 @@
-CUS001,xd,1,1111111111,kumaid,Regular
-CUS002,kojo,1,1111111111,1,regular
-CUS003,xs,1,1111111111,1,regular
-CUS004,mr yaw,23,2222222222,kumi,Premium
-CUS005,ee,1,1111111111,1,regular
+CUS007,lohi,3,1111111111,1,regular
+CUS0011,DE,1,1111111111,1,regular
 

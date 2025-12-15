@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * Service layer for transaction-related operations.
@@ -54,6 +55,7 @@ public class TransactionServices {
                 transactionManagement.addTransaction(transaction);
                 System.out.println("Transaction successful!");
                 FilePersistenceService.writeToTransactionFile("transaction",transaction);
+                FilePersistenceService.reWriteAllToFile();
             } else {
                 System.out.println("Transaction failed! Check balance or account rules.");
             }
@@ -93,6 +95,10 @@ public class TransactionServices {
     public void printTransactionHistory(Account account,ArrayList<Transaction> transactions){
         double totalDeposits = 0;
         double totalWithdrawals = 0;
+        if(transactions.isEmpty()){
+            System.out.printf("Account:%s Do not have any transactions.\n",account.getAccountNumber());
+            return;
+        }
         System.out.printf("Account: %s - %s\nAccount Type: %s\nCurrent Balance: %.2f\n\n",
                 account.getAccountNumber(), account.getCustomer(), account.getAccountType(), account.getBalance());
         System.out.println("ACCOUNT STATEMENT");

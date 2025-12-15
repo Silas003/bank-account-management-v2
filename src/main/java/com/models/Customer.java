@@ -17,7 +17,7 @@ public abstract class Customer {
 
     @Override
     public String toString() {
-        return String.format("%s ", this.getName());
+        return String.format("%s ", this.getCustomerId());
     }
 
 
