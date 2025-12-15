@@ -1,0 +1,55 @@
+package com.utilities;
+
+import com.models.Account;
+import com.models.exceptions.InvalidAccountException;
+import com.service.AccountManagement;
+
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Random;
+
+public class ConcurrencyUtils implements Runnable{
+    private Account account;
+    private String transactionType;
+    public ConcurrencyUtils(Account account,String transactionType){
+        this.account = account;
+        this.transactionType = transactionType;
+    }
+    public void run(){
+        double amount = new Random().nextDouble(1000);
+        String message = transactionType.equalsIgnoreCase("Deposit") ?
+                String.format("%s %sing %.2f to %s\n",Thread.currentThread().getName(),transactionType,amount,account.getAccountNumber()):
+                String.format("%s %sing %.2f from %s\n",Thread.currentThread().getName(),transactionType,amount,account.getAccountNumber());
+        System.out.printf(message);
+        account.processTransactions(amount,transactionType);
+    }
+
+    public static void simulateConcurrentTransactions()  {
+        try{
+        Account account = AccountManagement.findAccount("acc001");
+        Thread t1 = new Thread(new ConcurrencyUtils(account,"Deposit"));
+        Thread t2 = new Thread(new ConcurrencyUtils(account,"Withdraw"));
+        Thread t3 = new Thread(new ConcurrencyUtils(account,"Withdraw"));
+        Thread t4 = new Thread(new ConcurrencyUtils(account,"Deposit"));
+        Thread t5 = new Thread(new ConcurrencyUtils(account,"Deposit"));
+        t1.start();
+        t2.start();
+        t3.start();
+        t4.start();
+        t5.start();
+
+
+            t1.join();
+            t2.join();
+            t3.join();
+            t4.join();
+            t5.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        catch (InvalidAccountException iae){
+            System.out.println(iae.getMessage());
+        }
+
+    }
+}

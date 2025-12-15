@@ -22,8 +22,8 @@ public class AccountManagement {
 
 
     public static Account findAccount(String accountNumber) throws InvalidAccountException {
-        return Optional.ofNullable(accounts.get(accountNumber))
-                .orElseThrow(()-> new InvalidAccountException("Account Number not found.Returning to main menu"));
+        return Optional.ofNullable(accounts.get(accountNumber.toUpperCase()))
+                .orElseThrow(()-> new InvalidAccountException("Account Number: "+accountNumber+" not found.Returning to main menu"));
     }
 
 
