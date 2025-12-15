@@ -3,6 +3,8 @@ package com.service;
 import com.models.Transaction;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 /**
@@ -10,32 +12,26 @@ import java.util.ArrayList;
  */
 public class TransactionManagement {
 
-    public Transaction transactions[] = new Transaction[200];
+    public ArrayList<Transaction> transactions = new ArrayList<>();
     public int transactionCount;
 
-    public void addTransaction(Transaction transaction) throws ArrayIndexOutOfBoundsException{
-        if(!(transactionCount >= 200)) {
-            transactions[transactionCount] = transaction;
-            transactionCount++;
-        }else{
-            throw new ArrayIndexOutOfBoundsException("List Full.Cannot append more accounts to transactions list.");
-        }
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public ArrayList<Transaction> viewTransactionByAccount(String accountNumber) {
-        ArrayList<Transaction> accountTransactions = new ArrayList<>();
-        Transaction transaction;
-        for (int i = 0; i < transactionCount; i++) {
-            transaction = transactions[i];
-            if (transaction.getAccountNumber().equals(accountNumber)) {
-                accountTransactions.add(transaction);
-            }
-        }
-        return accountTransactions;
+        return transactions.stream()
+                .filter(trnx -> trnx.getAccountNumber().equals(accountNumber))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public ArrayList<Transaction> viewAllTransactionsTyType(String type){
+        return transactions.stream().filter(trnx->trnx.getType().equals(type))
+                .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     public int getTransactionCount() {
-        return this.transactionCount;
+        return this.transactions.size();
     }
 }
