@@ -4,11 +4,13 @@ import com.models.Account;
 import com.models.Transaction;
 import com.utilities.ValidationUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * Service layer for transaction-related operations.
@@ -42,14 +44,18 @@ public class TransactionServices {
             String dateTime = LocalDateTime.now().format(formatter);
             printTransactionSummary(userAccount, amount, transactionType.get(transactionTypeInput), newBalance, dateTime);
             ValidationUtils.validateTransactionConfirmation(scanner);
-            boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput));
+            boolean success = userAccount.processTransactions(amount, transactionType.get(transactionTypeInput),null);
+            Transaction transaction;
             if (success) {
-                transactionManagement.addTransaction(new Transaction(userAccount.getAccountNumber(),
+                transaction = new Transaction(userAccount.getAccountNumber(),
                         transactionType.get(transactionTypeInput),
                         amount,
                         userAccount.getBalance(),
-                        dateTime));
+                        dateTime);
+                transactionManagement.addTransaction(transaction);
                 System.out.println("Transaction successful!");
+                FilePersistenceService.writeToTransactionFile("transaction",transaction);
+                FilePersistenceService.reWriteAllToFile();
             } else {
                 System.out.println("Transaction failed! Check balance or account rules.");
             }
@@ -59,27 +65,72 @@ public class TransactionServices {
             ValidationUtils.promptEnterKey(scanner);
         }catch (RuntimeException re){
             System.out.println(re.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void transferToOtherAccounts() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         System.out.println("TRANSFER TO OTHER ACCOUNTS");
         System.out.println("==========================");
-        System.out.println("This feature is coming soon!");
-        System.out.println("You will be able to transfer funds between accounts here.");
+        try {
+        System.out.println("Enter sender account number");
+        String sender = ValidationUtils.validateAccountNumberInput(scanner);
+        System.out.println("Enter receiver account number");
+        String receiver = ValidationUtils.validateAccountNumberInput(scanner);
+        double amount = ValidationUtils.validateTransactionAmount(scanner);
+        Account senderAccount = AccountManagement.findAccount(sender);
+        Account receiverAccount = AccountManagement.findAccount(receiver);
+        boolean success = senderAccount.processTransactions(amount,"transfer",receiverAccount);
+        Transaction transaction;
+        String dateTime = LocalDateTime.now().format(formatter);
+        if (success) {
+            transaction = new Transaction(senderAccount.getAccountNumber(),
+                    "transfer",
+                    amount,
+                    senderAccount.getBalance(),
+                    dateTime);
+            transactionManagement.addTransaction(transaction);
+            System.out.println("Transaction successful!");
+
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
+            FilePersistenceService.reWriteAllToFile();
+            }
+         else {
+            System.out.println("Transaction failed! Check balance or account rules.");
+        }
+        } catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+                 | OverdraftLimitException | IllegalAmountException ce){
+            System.out.println(ce.getMessage());
+            ValidationUtils.promptEnterKey(scanner);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ValidationUtils.promptEnterKey(scanner);
     }
 
     public void viewTransactionHistory() {
-        System.out.println("VIEW TRANSACTION HISTORY");
+        System.out.println("GENERATE ACCOUNT STATEMENT");
         System.out.println("========================");
         try{
             String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
-            Account account = accountManagement.findAccount(accountNumber.toUpperCase());
-            ArrayList<Transaction> transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+            String sortType = ValidationUtils.validateTransactionSortTypeInput(scanner);
+            Account account = accountManagement.findAccount(accountNumber.toUpperCase());;
+            ArrayList<Transaction> transactions;
+            if (sortType.equalsIgnoreCase("1")){
+                transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
+            } else if (sortType.equalsIgnoreCase("2")) {
+                transactions = transactionManagement.viewAllTransactionsByAmount(account.getAccountNumber());
+            }else {
+                transactions = transactionManagement.viewAllTransactionsByDateTime(account.getAccountNumber());
+            }
+
             printTransactionHistory(account,transactions);
         }catch (InvalidAccountException iae){
             System.out.println(iae.getMessage());
+        } catch (TypeSelectionException e) {
+            throw new RuntimeException(e);
         }
         ValidationUtils.promptEnterKey(scanner);
     }
@@ -87,9 +138,13 @@ public class TransactionServices {
     public void printTransactionHistory(Account account,ArrayList<Transaction> transactions){
         double totalDeposits = 0;
         double totalWithdrawals = 0;
+        if(transactions.isEmpty()){
+            System.out.printf("Account:%s Do not have any transactions.\n",account.getAccountNumber());
+            return;
+        }
         System.out.printf("Account: %s - %s\nAccount Type: %s\nCurrent Balance: %.2f\n\n",
                 account.getAccountNumber(), account.getCustomer(), account.getAccountType(), account.getBalance());
-        System.out.println("TRANSACTION HISTORY");
+        System.out.println("ACCOUNT STATEMENT");
         System.out.println("=====================================================================");
         System.out.println("TXN ID | DATE/TIME          | TYPE    | AMOUNT    | BALANCE");
 
@@ -107,9 +162,9 @@ public class TransactionServices {
         System.out.println("Total Deposits: " + totalDeposits);
         System.out.println("Total Withdrawals: " + totalWithdrawals);
         System.out.println("Net Change: " + (totalDeposits - totalWithdrawals));
-
         ValidationUtils.promptEnterKey(scanner);
     }
+
 
     public void printTransactionSummary(Account account, double amount, String type, double newBalance, String dateTime) {
         System.out.println("TRANSACTION CONFIRMATION");

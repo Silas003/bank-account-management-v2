@@ -1,44 +1,43 @@
+
 package com.service;
 import com.models.Transaction;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 
 /**
  * Management layer for transaction data operations and storage.
  */
 public class TransactionManagement {
 
-    public Transaction transactions[] = new Transaction[200];
+    public static ArrayList<Transaction> transactions = new ArrayList<>();
     public int transactionCount;
 
-    public void addTransaction(Transaction transaction) throws ArrayIndexOutOfBoundsException{
-        if(!(transactionCount >= 200)) {
-            transactions[transactionCount] = transaction;
-            transactionCount++;
-        }else{
-            throw new ArrayIndexOutOfBoundsException("List Full.Cannot append more accounts to transactions list.");
-        }
+    public static void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public ArrayList<Transaction> viewTransactionByAccount(String accountNumber) {
-        ArrayList<Transaction> accountTransactions = new ArrayList<>();
-        Transaction transaction;
-        for (int i = 0; i < transactionCount; i++) {
-            transaction = transactions[i];
-            if (transaction.getAccountNumber().equals(accountNumber)) {
-                accountTransactions.add(transaction);
-            }
-        }
-        return accountTransactions;
+        return transactions.stream()
+                .filter(trnx -> trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void calculateTotalDeposits(String accountNumber) {
+    public ArrayList<Transaction> viewAllTransactionsByAmount(String accountNumber){
+        return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
+                .sorted(Comparator.comparing(Transaction::getAmount).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void calculateTotalWithdrawals(String accountNumber) {
+    public ArrayList<Transaction> viewAllTransactionsByDateTime(String accountNumber){
+        return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
+                .sorted(Comparator.comparing(Transaction::getTimeStamp).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public int getTransactionCount() {
-        return this.transactionCount;
+        return this.transactions.size();
     }
 }

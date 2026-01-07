@@ -1,6 +1,10 @@
 package com.service;
 import com.models.*;
 import com.models.exceptions.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Management layer for account data operations and storage.
@@ -8,41 +12,41 @@ import com.models.exceptions.*;
 
 public class AccountManagement {
 
-    private static Account[] accounts = new Account[50];
+    private static HashMap<String,Account> accounts = new HashMap<>();
     public static int accountCount;
 
     public static void addAccount(Account account) {
-        if (accountCount < accounts.length) {
-            accounts[accountCount++] = account;
-        } else {
-            System.out.println("Account list is full!");
-        }
+            accounts.put(account.getAccountNumber(), account);
     }
+
 
     public static Account findAccount(String accountNumber) throws InvalidAccountException {
-        for (int i = 0; i < accountCount; i++) {
-            Account account = accounts[i];
-            if (account.getAccountNumber().equals(accountNumber)) return account;
-        }
-        throw new InvalidAccountException("Account Number not found.Returning to main menu");
+        return Optional.ofNullable(accounts.get(accountNumber.toUpperCase()))
+                .orElseThrow(()-> new InvalidAccountException("Account Number: "+accountNumber+" not found.Returning to main menu"));
     }
 
-    public static Account[] viewAllAccounts() {
-        return accounts;
+
+
+    public static ArrayList<Account> viewAllAccounts() {
+        ArrayList<Account> viewAccounts = new ArrayList<>();
+        for(Account account:accounts.values())
+            viewAccounts.add(account);
+        return viewAccounts;
     }
 
     public double getTotalBalance() {
         double totalBalance = 0;
-        Account account;
-        System.out.println(accountCount);
-        for (int i = 0; i < accountCount; i++) {
-            account = accounts[i];
+        for (Account account:accounts.values()) {
             totalBalance += account.getBalance();
         }
         return totalBalance;
     }
 
     public static int getAccountCount() {
-        return accountCount;
+        return accounts.size();
+    }
+
+    public static void returnVoid(){
+        System.out.println(accounts);
     }
 }

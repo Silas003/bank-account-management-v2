@@ -8,7 +8,8 @@ public abstract class Customer {
     private String contact;
     private String type;
     private String address;
-    static int customerCounter;
+    public static int customerCounter;
+
 
     Customer() {
         setCustomerId();
@@ -16,8 +17,9 @@ public abstract class Customer {
 
     @Override
     public String toString() {
-        return String.format("%s ", this.getName());
+        return String.format("%s ", this.getCustomerId());
     }
+
 
     Customer(String name, int age, String contact, String address,String type) {
         this();
@@ -27,18 +29,31 @@ public abstract class Customer {
         setAddress(address);
         setType(type);
     }
+    Customer(String CustomerId,String name, int age, String contact, String address,String type) {
+        setCustomerIdFromFile(CustomerId);
+        setName(name);
+        setAge(age);
+        setContact(contact);
+        setAddress(address);
+        setType(type);
+    }
+
 
     public String getCustomerId() {
         return this.customerId;
     }
 
+
     public void setCustomerId() {
         this.customerId = "CUS00" + ++customerCounter;
     }
-
+    public void setCustomerIdFromFile(String customerId) {
+        this.customerId = customerId;
+    }
     public String getName() {
         return this.name;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -52,6 +67,7 @@ public abstract class Customer {
         this.age = age;
     }
 
+
     public String getContact() {
         return this.contact;
     }
@@ -59,6 +75,7 @@ public abstract class Customer {
     public void setContact(String contact) {
         this.contact = contact;
     }
+
 
     public String getAddress() {
         return this.address;
@@ -71,6 +88,7 @@ public abstract class Customer {
     public  void setType(String type){
         this.type = type;
     }
+
 
     public abstract String displayCustomerDetails();
 

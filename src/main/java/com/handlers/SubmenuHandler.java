@@ -2,6 +2,7 @@ package com.handlers;
 
 import com.service.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -22,7 +23,7 @@ public class SubmenuHandler {
         this.customerService = customerService;
     }
 
-    public void manageAccounts() {
+    public void manageAccounts()  {
         boolean backToMain = false;
         System.out.println("\n||=================||");
         System.out.println("  MANAGE ACCOUNTS");

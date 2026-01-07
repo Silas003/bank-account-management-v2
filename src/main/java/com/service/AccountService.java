@@ -1,11 +1,16 @@
+
 package com.service;
 import com.models.*;
 import com.models.exceptions.*;
 import com.utilities.ValidationUtils;
-
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 
 /**
  * Service layer for account-related business operations and user interactions.
@@ -17,12 +22,14 @@ public class AccountService {
     private final CustomerManagement customerManagement;
     private final Scanner scanner;
 
+
     public AccountService(AccountManagement accountManagement,TransactionManagement transactionManagement,CustomerManagement customerManagement ,Scanner scanner) {
         this.accountManagement = accountManagement;
         this.transactionManagement = transactionManagement;
         this.scanner = scanner;
         this.customerManagement = customerManagement;
     }
+
 
     public void createAccount() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -31,6 +38,7 @@ public class AccountService {
 
         System.out.println("ACCOUNT CREATION");
         System.out.println("====================================");
+
         try{
             customerName = ValidationUtils.validateCustomerNameInput(scanner);
             customerAge = ValidationUtils.validateCustomerAgeInput(scanner);
@@ -49,17 +57,20 @@ public class AccountService {
             newAccount = accounTypeInput.equals("1") ? new SavingsAccount(customer, initialDepositAmount) : new CheckingAccount(customer, initialDepositAmount);
 
             customerManagement.addCustomer(customer);
+            FilePersistenceService.writeToCustomerFile("customer",customer);
             accountManagement.addAccount(newAccount);
             String dateTime = LocalDateTime.now().format(formatter);
-            transactionManagement.addTransaction(new Transaction(newAccount.getAccountNumber(),
-                        "Deposit",
-                        initialDepositAmount,
-                        initialDepositAmount,
-                        dateTime));
+            Transaction transaction = new Transaction(newAccount.getAccountNumber(),
+                    "Deposit",
+                    initialDepositAmount,
+                    initialDepositAmount,
+                    dateTime);
+            transactionManagement.addTransaction(transaction);
 
             System.out.println("Account created successfully!");
+            FilePersistenceService.writeToTransactionFile("transaction",transaction);
+            FilePersistenceService.writeToAccountFile("account",newAccount);
             System.out.println(newAccount.displayAccountDetails());
-
             ValidationUtils.promptEnterKey(scanner);
 
         } catch (CustomerNameException | CustomerAddressException | CustomerAgeException |
@@ -73,32 +84,33 @@ public class AccountService {
 
 
 
-    public void viewAllAccounts() {
-        
+    public void viewAllAccounts(){
+
         if(accountManagement.getAccountCount() <= 0){
             System.out.println("No Account In System.Returning to Main menu");
             ValidationUtils.promptEnterKey(scanner);
             return;
         }
+
         System.out.println("ACCOUNT LISTING");
         System.out.println("====================================================");
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
-        Account[] allAccounts = accountManagement.viewAllAccounts();
+        ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
+
         for (int i = 0; i < accountManagement.getAccountCount(); i++) {
-            Account account = allAccounts[i];
-            System.out.printf("%s | %s | %s | $%.2f | %s | %s\n",
+
+            Account account = allAccounts.get(i);
+            System.out.printf("%s | %s | %s | $%.2f | %s\n",
                     account.getAccountNumber(),
                     account.getCustomer(),
                     account.getAccountType(),
                     account.getBalance(),
-                    account.getStatus(),
-                    account.getAccountSpecificDetails());
+                    account.getStatus());
         }
 
-        System.out.printf("Total Accounts: %d\nTotal Bank Balance: $%.2f\n",
-                accountManagement.getAccountCount(), accountManagement.getTotalBalance());
         ValidationUtils.promptEnterKey(scanner);
+
     }
 }
