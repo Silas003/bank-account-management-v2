@@ -1,9 +1,11 @@
 package com.utilities;
 import com.models.Account;
+import com.models.exceptions.InsufficientFundsExceptions;
 import com.models.exceptions.InvalidAccountException;
+import com.models.exceptions.OverdraftLimitException;
 import com.service.AccountManagement;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
+
 
 public class ConcurrencyUtils implements Runnable{
     private Account account;
@@ -24,7 +26,11 @@ public class ConcurrencyUtils implements Runnable{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        account.processTransactions(amount,transactionType,null);
+        try {
+            account.processTransactions(amount,transactionType,null);
+        } catch (OverdraftLimitException | InsufficientFundsExceptions e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void simulateConcurrentTransactions()  {

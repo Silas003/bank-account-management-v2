@@ -63,15 +63,15 @@ public abstract class Account implements Transactable {
         this.status = status;
     }
 
-    public abstract boolean deposit(double amount) ;
+    public abstract boolean deposit(double amount);
 
-    public abstract void withdraw (double amount) throws Exception;
+    public abstract void withdraw (double amount) throws InsufficientFundsExceptions,OverdraftLimitException;
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 
-    public boolean processTransactions(double amount, String type,Account receiver) throws IllegalAmountException, InsufficientFundsExceptions {
+    public boolean processTransactions(double amount, String type,Account receiver) throws OverdraftLimitException, InsufficientFundsExceptions {
 
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);

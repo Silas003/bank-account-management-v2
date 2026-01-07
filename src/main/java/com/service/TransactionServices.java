@@ -100,7 +100,7 @@ public class TransactionServices {
          else {
             System.out.println("Transaction failed! Check balance or account rules.");
         }
-        } catch (InvalidAccountException | InsufficientFundsExceptions | TypeSelectionException
+        } catch (InvalidAccountException | InsufficientFundsExceptions 
                  | OverdraftLimitException | IllegalAmountException ce){
             System.out.println(ce.getMessage());
             ValidationUtils.promptEnterKey(scanner);
