@@ -73,18 +73,14 @@ public class CheckingAccount extends Account {
     }
 
 
-    public synchronized   boolean deposit(double amount)  {
+    public synchronized  boolean deposit(double amount)  {
         setBalance(getBalance() + amount);
         return true;
     }
 
-    public synchronized void withdraw(double amount) throws Exception {
+    public synchronized void withdraw(double amount) throws OverdraftLimitException, InsufficientFundsExceptions {
         double balance = getBalance();
-        try {
-            hasOverdraftLimitExceeded(amount);
-        } catch (OverdraftLimitException e) {
-            throw new Exception(e);
-        }
+        hasOverdraftLimitExceeded(amount);
         this.setBalance(balance - amount);
     }
 
