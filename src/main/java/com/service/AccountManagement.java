@@ -2,9 +2,8 @@ package com.service;
 import com.models.*;
 import com.models.exceptions.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Management layer for account data operations and storage.
@@ -12,8 +11,7 @@ import java.util.Optional;
 
 public class AccountManagement {
 
-    private static HashMap<String,Account> accounts = new HashMap<>();
-    public static int accountCount;
+    private static Map<String,Account> accounts = new HashMap<>();
 
     public static void addAccount(Account account) {
             accounts.put(account.getAccountNumber(), account);
@@ -27,26 +25,20 @@ public class AccountManagement {
 
 
 
-    public static ArrayList<Account> viewAllAccounts() {
-        ArrayList<Account> viewAccounts = new ArrayList<>();
-        for(Account account:accounts.values())
-            viewAccounts.add(account);
-        return viewAccounts;
+    public static List<Account> viewAllAccounts() {
+        return accounts.values().stream().collect(Collectors.toList());
     }
 
     public double getTotalBalance() {
-        double totalBalance = 0;
-        for (Account account:accounts.values()) {
-            totalBalance += account.getBalance();
-        }
-        return totalBalance;
+
+        return accounts.values().stream().mapToDouble(account ->account.getBalance()).sum();
+
     }
 
-    public static int getAccountCount() {
-        return accounts.size();
+    public static int getAccountCount(){
+        return accounts.values().size();
     }
 
-    public static void returnVoid(){
-        System.out.println(accounts);
-    }
+
+
 }

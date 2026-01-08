@@ -8,7 +8,7 @@ public abstract class Customer {
     private String contact;
     private String type;
     private String address;
-    public static int customerCounter;
+    private static int customerCounter;
 
 
     Customer() {
@@ -43,7 +43,9 @@ public abstract class Customer {
         return this.customerId;
     }
 
-
+    public static void setCustomerCounter(int number) {
+        customerCounter =number;
+    }
     public void setCustomerId() {
         this.customerId = "CUS00" + ++customerCounter;
     }

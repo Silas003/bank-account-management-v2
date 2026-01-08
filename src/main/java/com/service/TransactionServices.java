@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -100,8 +101,8 @@ public class TransactionServices {
          else {
             System.out.println("Transaction failed! Check balance or account rules.");
         }
-        } catch (InvalidAccountException | InsufficientFundsExceptions 
-                 | OverdraftLimitException | IllegalAmountException ce){
+        } catch (InvalidAccountException | InsufficientFundsExceptions
+                 | IllegalAmountException ce){
             System.out.println(ce.getMessage());
             ValidationUtils.promptEnterKey(scanner);
         }catch (Exception e) {
@@ -117,7 +118,7 @@ public class TransactionServices {
             String accountNumber = ValidationUtils.validateAccountNumberInput(scanner);
             String sortType = ValidationUtils.validateTransactionSortTypeInput(scanner);
             Account account = accountManagement.findAccount(accountNumber.toUpperCase());;
-            ArrayList<Transaction> transactions;
+            List<Transaction> transactions;
             if (sortType.equalsIgnoreCase("1")){
                 transactions = transactionManagement.viewTransactionByAccount(account.getAccountNumber());
             } else if (sortType.equalsIgnoreCase("2")) {
@@ -135,7 +136,7 @@ public class TransactionServices {
         ValidationUtils.promptEnterKey(scanner);
     }
 
-    public void printTransactionHistory(Account account,ArrayList<Transaction> transactions){
+    public void printTransactionHistory(Account account,List<Transaction> transactions){
         double totalDeposits = 0;
         double totalWithdrawals = 0;
         if(transactions.isEmpty()){

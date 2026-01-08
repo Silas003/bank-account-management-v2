@@ -97,20 +97,18 @@ public class AccountService {
         System.out.println("ACC NO | CUSTOMER NAME | TYPE | BALANCE | STATUS");
         System.out.println("====================================================");
 
-        ArrayList<Account> allAccounts = accountManagement.viewAllAccounts();
+        List<Account> allAccounts = accountManagement.viewAllAccounts();
 
-        for (int i = 0; i < accountManagement.getAccountCount(); i++) {
-
-            Account account = allAccounts.get(i);
-            System.out.printf("%s | %s | %s | $%.2f | %s\n",
-                    account.getAccountNumber(),
-                    account.getCustomer(),
-                    account.getAccountType(),
-                    account.getBalance(),
-                    account.getStatus());
-        }
-
+        allAccounts.forEach(this::returnData);
         ValidationUtils.promptEnterKey(scanner);
 
+    }
+    public void returnData(Account account){
+        System.out.printf("%s | %s | %s | $%.2f | %s\n",
+                account.getAccountNumber(),
+                account.getCustomer(),
+                account.getAccountType(),
+                account.getBalance(),
+                account.getStatus());
     }
 }

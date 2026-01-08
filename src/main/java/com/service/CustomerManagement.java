@@ -4,17 +4,18 @@ import com.models.Customer;
 import com.models.exceptions.InvalidAccountException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CustomerManagement {
 
-    private static ArrayList<Customer> customers = new ArrayList<>();
+    private static List<Customer> customers = new ArrayList<>();
 
     public static void addCustomer(Customer customer){
         customers.add(customer);
     }
 
-    public ArrayList<Customer> getAllCustomers(){
+    public List<Customer> getAllCustomers(){
         return customers;
     }
     public static int getCustomerSize(){
@@ -22,11 +23,8 @@ public class CustomerManagement {
     }
 
     public static Customer findCustomerById(String customerId) throws InvalidAccountException {
-        for(Customer customer:customers){
-//            System.out.println(customer.displayCustomerDetails());
-            if(customer.getCustomerId().equals(customerId)) return customer;
-//            throw new InvalidAccountException("Account Number not found.Returning to main menu");
-        }
-        return null;
+        return customers.stream().filter(cstm -> cstm.getCustomerId().equalsIgnoreCase(customerId))
+                .findFirst()
+                .orElse(null);
     }
 }

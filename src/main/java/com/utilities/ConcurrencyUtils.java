@@ -5,7 +5,10 @@ import com.models.exceptions.InvalidAccountException;
 import com.models.exceptions.OverdraftLimitException;
 import com.service.AccountManagement;
 import java.util.Random;
-
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ConcurrencyUtils implements Runnable{
     private Account account;
@@ -22,44 +25,31 @@ public class ConcurrencyUtils implements Runnable{
                 String.format("%s %sing %.2f from %s\n",Thread.currentThread().getName(),transactionType,amount,account.getAccountNumber());
         System.out.printf(message);
         try {
-            Thread.sleep(450);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             account.processTransactions(amount,transactionType,null);
-        } catch (OverdraftLimitException | InsufficientFundsExceptions e) {
-            System.out.println(e.getMessage());
+        } catch (OverdraftLimitException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void simulateConcurrentTransactions()  {
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
         try{
-        Account account = AccountManagement.findAccount("acc001");
-        Thread t1 = new Thread(new ConcurrencyUtils(account,"Deposit"));
-        Thread t2 = new Thread(new ConcurrencyUtils(account,"Withdraw"));
-        Thread t3 = new Thread(new ConcurrencyUtils(account,"Withdraw"));
-        Thread t4 = new Thread(new ConcurrencyUtils(account,"Deposit"));
-        Thread t5 = new Thread(new ConcurrencyUtils(account,"Deposit"));
-        t1.start();
-        t2.start();
-        t3.start();
-        t4.start();
-        t5.start();
+            Account account = AccountManagement.findAccount("acc001");
+            executorService.submit(new ConcurrencyUtils(account,"Deposit"));
+            executorService.submit(new ConcurrencyUtils(account,"Withdraw"));
+            executorService.submit(new ConcurrencyUtils(account,"Deposit"));
+            executorService.submit(new ConcurrencyUtils(account,"Withdraw"));
+            executorService.submit(new ConcurrencyUtils(account,"Deposit"));
 
-            t1.join();
-            t2.join();
-            t3.join();
-            t4.join();
-            t5.join();
-            System.out.println("Thread-safe opeartions completed successfully.");
-            System.out.printf("Final Balance for ACC001: $%.2f",account.getBalance());
 
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        catch (InvalidAccountException iae){
+
+        } catch (InvalidAccountException iae){
             System.out.println(iae.getMessage());
+        }finally {
+            executorService.shutdown();
+            System.out.println("Thread-safe opeartions completed successfully.");
+//            System.out.printf("Final Balance for ACC001: $%.2f",account.getBalance());
+
         }
 
     }

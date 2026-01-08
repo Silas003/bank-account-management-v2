@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,7 +65,7 @@ class TransactionManagementTest {
     void addTransactionCapacityBoundaryAllows200Test() {
         int initialCount = management.getTransactionCount();
         int initialSize = management.transactions.size();
-        
+
         // Add transactions up to the limit relative to current count
         int transactionsToAdd = 200 - initialCount;
         for (int index = 0; index < transactionsToAdd; index++) {
@@ -87,7 +88,7 @@ class TransactionManagementTest {
         String testAcc123 = "TEST-ACC123";
         String testAcc999 = "TEST-ACC999";
         String testAcc888 = "TEST-ACC888";
-        
+
         Transaction depositTxForAcc123 =
                 newTransaction(testAcc123, "Deposit", 200.0, 1200.0, "2025-12-08T09:00:00Z");
         Transaction depositTxForAcc999 =
@@ -102,12 +103,12 @@ class TransactionManagementTest {
         management.addTransaction(withdrawalTxForAcc123);
         management.addTransaction(smallDepositTxForAcc888);
 
-        ArrayList<Transaction> transactionsForAcc123 = management.viewTransactionByAccount(testAcc123);
+        List<Transaction> transactionsForAcc123 = management.viewTransactionByAccount("ACC123");
         assertEquals(2, transactionsForAcc123.size(), "ACC123 should have exactly 2 transactions");
         assertTrue(transactionsForAcc123.contains(depositTxForAcc123), "List should include the deposit for ACC123");
         assertTrue(transactionsForAcc123.contains(withdrawalTxForAcc123), "List should include the withdrawal for ACC123");
 
-        ArrayList<Transaction> transactionsForAcc999 = management.viewTransactionByAccount(testAcc999);
+        List<Transaction> transactionsForAcc999 = management.viewTransactionByAccount("ACC999");
         assertEquals(1, transactionsForAcc999.size(), "ACC999 should have exactly 1 transaction");
         assertTrue(transactionsForAcc999.contains(depositTxForAcc999), "List should include the deposit for ACC999");
     }
@@ -123,7 +124,7 @@ class TransactionManagementTest {
         management.addTransaction(depositTxForAcc001);
         management.addTransaction(withdrawalTxForAcc002);
 
-        ArrayList<Transaction> transactionsForUnknownAcc = management.viewTransactionByAccount("UNKNOWN");
+        List<Transaction> transactionsForUnknownAcc = management.viewTransactionByAccount("UNKNOWN");
         assertNotNull(transactionsForUnknownAcc, "Should return a non-null list");
         assertTrue(transactionsForUnknownAcc.isEmpty(), "List should be empty when there are no matches");
     }
@@ -151,7 +152,7 @@ class TransactionManagementTest {
     @Test
     @DisplayName("viewTransactionByAccount handles zero transactions gracefully")
     void viewTransactionByAccountWhenEmptyTest() {
-        ArrayList<Transaction> transactionsForAnyAcc = management.viewTransactionByAccount("ANY");
+        List<Transaction> transactionsForAnyAcc = management.viewTransactionByAccount("ANY");
         assertNotNull(transactionsForAnyAcc, "Should return a non-null list even when empty");
         assertTrue(transactionsForAnyAcc.isEmpty(), "No transactions yet => empty result");
     }
