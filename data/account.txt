@@ -1,3 +1,6 @@
 ACC003,CUS0011 ,Savings,555.00,active
 ACC001,CUS007 ,Savings,1138.00,active
 ACC007,CUS004 ,Savings,3434.00,active
+ACC0092,CUS001 ,Savings,4324.00,active
+ACC005,CUS001 ,Savings,34343.00,active
+ACC006,CUS008 ,Savings,3434.00,active

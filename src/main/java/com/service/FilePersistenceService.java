@@ -55,11 +55,11 @@ public class FilePersistenceService {
 
     }
 
-    public static ArrayList<List> readFromFile(String filepath) throws IOException {
+    public static List<String[]> readFromFile(String filepath) throws IOException {
         Path path = getOrCreateFile(filepath);
-        List<String> readData = Files.readAllLines(path);
-        return readData.stream().map(p->Arrays.asList(p.split(",")))
-                .collect(Collectors.toCollection(ArrayList::new));
+        var readData = Files.readAllLines(path);
+        return readData.stream().map(item-> item.split(",")).toList();
+
     }
     private static String convertAccountToString(Account account){
         return String.format("%s,%s,%s,%.2f,%s",
@@ -118,64 +118,67 @@ public class FilePersistenceService {
     }
 
     public static void loadAllDataFromFile() throws IOException, InvalidAccountException {
-        Double balance;
-        Double amount;
-        Double balanceAfter;
-        System.out.println("Loading customer data from files...");
-        ArrayList<List> customers = readFromFile("customer");
-        for (List<String> row : customers) {
-            if(row.size()>=5) {
-                if(row.get(5).equalsIgnoreCase("Regular")){
-                    customer = new RegularCustomer(
-                            row.get(0),
-                            row.get(1),
-                            Integer.parseInt(row.get(2)),
-                            row.get(3),
-                            row.get(4),
-                            row.get(5));
+        System.out.println("Loadind data from files...");
+        List<String[]> customers = readFromFile("customer");
+         customers.stream()
+                 .filter(row -> row.length >= 5)
+                .map(row->
 
-                }else {
-                    customer = new PremiumCustomer(
-                            row.get(0),
-                            row.get(1),
-                            Integer.parseInt(row.get(2)),
-                            row.get(3),
-                            row.get(4),
-                            row.get(5)
-                    );
+                {
+                    if(row[5].equalsIgnoreCase("Regular")) {
+                        return new RegularCustomer(
+                                row[0],
+                                row[1],
+                                Integer.parseInt(row[2]),
+                                row[3],
+                                row[4],
+                                row[5]);
+                    }else {return new PremiumCustomer(
+                            row[0],
+                            row[1],
+                            Integer.parseInt(row[2]),
+                            row[3],
+                            row[4],
+                            row[5]);}
                 }
-                CustomerManagement.addCustomer(customer);
-            }
-        }
-        Customer.customerCounter = customers.size();
-        System.out.println("Loading account data from files...");
-        ArrayList<List> accounts = readFromFile("account");
-        Account.accountCounter = accounts.size();
-        for (List<String> row : accounts) {
-            if(row.size() >=3) {
-                Customer customer1 = CustomerManagement.findCustomerById(row.get(1).trim());
-                balance = ValidationUtils.parseMoney(row.get(3));
-                if(row.get(2).equalsIgnoreCase("Savings")){
-                    account = new SavingsAccount(row.get(0).trim(),customer1,balance);
-                }else {
-                    account = new CheckingAccount(row.get(0).trim(),customer1,balance);
-                }
-            }
 
-            AccountManagement.addAccount(account);
-        }
-        System.out.println("Loading transaction data from files...");
-        ArrayList<List> transactions = readFromFile("transaction");
-        Transaction.transactionCounter = transactions.size();
-        for (List<String> row : transactions) {
-            if(row.size() >=3) {
-                amount = ValidationUtils.parseMoney(row.get(3));
-                balanceAfter = ValidationUtils.parseMoney(row.get(4));
-                transaction = new Transaction(row.get(0), row.get(1).trim(), row.get(2), amount,balanceAfter,row.get(5));
-            }
+        ).forEach(CustomerManagement::addCustomer);
+        List<String[]> accounts = readFromFile("account");
+        accounts.stream()
+                .filter(row -> row.length >= 3)
+                .map(row->
 
-            TransactionManagement.addTransaction(transaction);
-        }
+                        {
+                            Customer customer1 = null;
+                            try {
+                                customer1 = CustomerManagement.findCustomerById(row[1].trim());
+                            } catch (InvalidAccountException e) {
+                                throw new RuntimeException(e);
+                            }
+                            double balances = ValidationUtils.parseMoney(row[3]);
+                            if(row[2].equalsIgnoreCase("Savings")) {
+                                return new SavingsAccount(row[0].trim(),customer1,balances);
+                            }else {return new CheckingAccount(row[0].trim(),customer1,balances);}
+                        }
+
+                ).forEach(AccountManagement::addAccount);
+        List<String[]> transactions = readFromFile("transaction");
+        transactions.stream()
+                .filter(row -> row.length >= 3)
+                .map(row->
+                        {
+                            double amounts = ValidationUtils.parseMoney(row[3]);
+                            double balanceAfters = ValidationUtils.parseMoney(row[4]);
+                            return new Transaction(row[0], row[1].trim(), row[2], amounts,balanceAfters,row[5]);
+
+                        }
+
+                ).forEach(TransactionManagement::addTransaction);
+
+        Customer.setCustomerCounter(customers.size());
+        Account.setAccountCounter(accounts.size());
+        Transaction.setTransactionCounter(transactions.size());
+
         System.out.printf("%d customers loaded from customer.txt\n",customers.size());
         System.out.printf("%d accounts loaded from account.txt\n",accounts.size());
         System.out.printf("%d transactions loaded from transaction.txt\n",transactions.size());

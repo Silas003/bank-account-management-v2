@@ -7,7 +7,7 @@ public abstract class Account implements Transactable {
     private Customer customer;
     private double balance;
     private String status;
-    public static int accountCounter;
+    private static int accountCounter;
 
 
     Account() {
@@ -65,13 +65,13 @@ public abstract class Account implements Transactable {
 
     public abstract boolean deposit(double amount) ;
 
-    public abstract void withdraw (double amount) throws Exception;
+    public abstract void withdraw (double amount) throws InsufficientFundsExceptions;
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
-
-    public boolean processTransactions(double amount, String type,Account receiver) throws IllegalAmountException, InsufficientFundsExceptions {
+    public static void setAccountCounter(int number){accountCounter = number;}
+    public boolean processTransactions(double amount, String type,Account receiver) throws InsufficientFundsExceptions {
 
         if (type.equalsIgnoreCase("Deposit")) {
             return deposit(amount);

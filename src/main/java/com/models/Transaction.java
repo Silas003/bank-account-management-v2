@@ -2,7 +2,7 @@ package com.models;
 
 public class Transaction {
 
-    public static int transactionCounter;
+    private static int transactionCounter;
     private String transactionId;
     private String type;
     private String accountNumber;
@@ -64,7 +64,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-
+    public static void setTransactionCounter(int number){transactionCounter = number;}
     private void setBalanceAfter(double balanceAfter) {
         this.balanceAfter = balanceAfter;
     }

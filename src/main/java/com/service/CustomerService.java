@@ -2,7 +2,10 @@ package com.service;
 import com.models.Customer;
 import com.utilities.ValidationUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+
 
 /**
  * Service layer for customer-related operations.
@@ -18,8 +21,8 @@ public class CustomerService {
 
 
     public void viewAllCustomers(){
-        ArrayList<Customer> customers = customerManagement.getAllCustomers();
-        if (customers.size() == 0) {
+        List<Customer> customers = customerManagement.getAllCustomers();
+        if (Arrays.asList(customers).size() == 0) {
             System.out.println("No Customer in system.Returning to Main menu");
             ValidationUtils.promptEnterKey(scanner);
 

@@ -4,6 +4,7 @@ import com.models.Transaction;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -12,26 +13,25 @@ import java.util.stream.Collectors;
  */
 public class TransactionManagement {
 
-    public static ArrayList<Transaction> transactions = new ArrayList<>();
-    public int transactionCount;
+    public static List<Transaction> transactions = new ArrayList<>();
 
     public static void addTransaction(Transaction transaction) {
         transactions.add(transaction);
     }
 
-    public ArrayList<Transaction> viewTransactionByAccount(String accountNumber) {
+    public List<Transaction> viewTransactionByAccount(String accountNumber) {
         return transactions.stream()
                 .filter(trnx -> trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Transaction> viewAllTransactionsByAmount(String accountNumber){
+    public List<Transaction> viewAllTransactionsByAmount(String accountNumber){
         return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
                 .sorted(Comparator.comparing(Transaction::getAmount).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Transaction> viewAllTransactionsByDateTime(String accountNumber){
+    public List<Transaction> viewAllTransactionsByDateTime(String accountNumber){
         return transactions.stream().filter(trnx->trnx.getAccountNumber().equalsIgnoreCase(accountNumber))
                 .sorted(Comparator.comparing(Transaction::getTimeStamp).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
